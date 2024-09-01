@@ -1,0 +1,6 @@
+/* Estilos personalizados */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+body {
+    padding-top: 56px; /* Ajustar para el menú fijo */
+    background-color: #f8f9fa;
+}
