@@ -24,7 +24,13 @@ document.addEventListener("DOMContentLoaded", function() {
         // Ejemplo de verificación de credenciales
         if (email === 'test@example.com' && password === '1234') {
             localStorage.setItem('authenticated', 'true');
-            window.location.href = '/views/visualizador.html';
+
+            // Redireccionar según el tipo de usuario
+            if (userType === 'admin') {
+                window.location.href = '/views/admin-dashboard.html'; // Redirige al panel de administración
+            } else if (userType === 'user') {
+                window.location.href = '/views/user-dashboard.html'; // Redirige al panel de usuario
+            }
         } else {
             errorMessage.textContent = 'Correo electrónico o contraseña incorrectos.';
         }
@@ -70,8 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Abrir el modal
     btnOpenModal.addEventListener('click', function() {
-        registerModal.style.display = 'block';
-        registerModal.classList.add('show');
+        openModal();
     });
 
     // Cerrar el modal
@@ -83,8 +88,15 @@ document.addEventListener("DOMContentLoaded", function() {
         closeModal();
     });
 
+    function openModal() {
+        registerModal.style.display = 'block';
+        registerModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+    }
+
     function closeModal() {
         registerModal.style.display = 'none';
         registerModal.classList.remove('show');
+        document.body.style.overflow = ''; // Restore scrolling
     }
 });

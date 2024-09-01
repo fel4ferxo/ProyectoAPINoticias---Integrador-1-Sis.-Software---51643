@@ -1,0 +1,276 @@
+/* user-dashboard.css */
+body {
+    background-color: #f0f2f5; /* Fondo claro para el dashboard */
+    color: #333;
+    margin: 0; /* Elimina el margen por defecto */
+    padding: 0; /* Elimina el padding por defecto */
+    position: relative; /* Necesario para el posicionamiento absoluto */
+}
+
+.navbar {
+    margin-bottom: 20px;
+    z-index: 999; /* Asegura que la barra de navegación esté sobre otros elementos */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+}
+
+.dropdown-toggle::after {
+    display: none; /* Elimina el triángulo de despliegue si no se quiere mostrar */
+}
+
+.user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Ajustar el estilo del menú desplegable */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1050; /* Asegura que el menú esté sobre otros elementos */
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    color: #f8f9fa; /* Color del texto para el enlace activo */
+    background-color: #343a40; /* Fondo del enlace activo (opcional) */
+}
+
+/* Estilos para el contenedor del filtro */
+/* Estilo del botón de filtros */
+#filter-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el ícono y el texto */
+    font-size: 1rem;
+    color: #007bff; /* Color del texto del filtro */
+    border-bottom: 2px solid #007bff; /* Línea debajo del texto */
+    padding: 8px 0;
+}
+
+#filter-toggle i {
+    font-size: 1.2rem; /* Tamaño del ícono */
+}
+
+#filter-area {
+    display: none;
+    position: fixed; /* Cambia de absolute a fixed para mantener la posición cuando se hace scroll */
+    top: 60px; /* Ajusta según el tamaño de la barra de navegación */
+    left: 0;
+    background-color: #f8f9fa;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 250px;
+    height: calc(100vh - 60px); /* Ajusta la altura si es necesario */
+    overflow-y: auto; /* Permite el desplazamiento si el contenido es más alto que el área */
+    margin-bottom: 40px;
+}
+
+#news-cards-container {
+    margin-top: 40px; /* Ajusta el espacio encima del contenedor de cards */
+}
+
+#filter-area.show {
+    display: block;
+}
+
+/* Ajustes para el contenido principal */
+.main-content {
+    margin-left: 275px; /* Ajusta el margen izquierdo para dejar espacio para el área de filtros */
+    max-width: calc(100% - 275px); /* Ajusta el ancho máximo del contenido para dejar espacio para el área de filtros */
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    /* Para pantallas más pequeñas */
+    #filter-toggle {
+        font-size: 0.9rem; /* Tamaño de fuente más pequeño en pantallas pequeñas */
+    }
+
+    #filter-area {
+        width: 100%;
+        height: auto; /* Ajusta la altura para que se adapte al contenido */
+        position: static; /* Cambia a static para que se posicione en el flujo normal del documento */
+        margin-top: 40px;
+    }
+
+    .main-content {
+        margin-left: 0; /* Elimina el margen izquierdo en pantallas pequeñas */
+        max-width: 100%; /* Ajusta el ancho máximo en pantallas pequeñas */
+    }
+
+    #news-cards-container {
+        margin-top: 40px; /* Ajusta el espacio encima del contenedor de cards */
+    }
+}
+
+/* Cards Noticias */
+.card {
+    position: relative;
+    width: 100%;
+    perspective: 1000px; /* Añade perspectiva para el efecto 3D */
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+}
+
+.card-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+}
+
+.card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card:hover img {
+    transform: rotateY(180deg);
+}
+
+.card-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    color: #fff; /* Color del texto en la parte delantera */
+    text-align: center;
+}
+
+/* Estilo para el modal */
+.modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    position: relative;
+    margin: 10px auto;
+    max-width: 600px;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    border-radius: 0.3rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.modal-header, .modal-body, .modal-footer {
+    padding: 1rem;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+/* Estilo para la línea de tiempo */
+#timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.timeline {
+    padding: 10px 0;
+    list-style-type: none;
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #343a40;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    margin-left: -3px;
+}
+
+.timeline-item {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #343a40;
+    left: 15px;
+    top: 8px;
+    transform: translate(-50%, -50%);
+}
+
+.timeline-content {
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    position: relative;
+    margin-left: 40px;
+}
