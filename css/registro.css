@@ -1,0 +1,12 @@
+body{
+    background: #ececec;
+}
+.box-area{
+    width: 930px;
+}
+.text-white{
+    font-weight: 600;
+}
+.text-lg-center{
+    font-weight: 700;
+}

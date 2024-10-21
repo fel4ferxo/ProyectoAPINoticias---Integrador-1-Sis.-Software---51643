@@ -1,0 +1,21 @@
+html, body{
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+.drophead {
+    font-style: italic;
+}
+.author-date {
+    display: flex;
+    justify-content: space-between;
+}
+.news-outlet {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+}
+hr{
+    color: #257abf;
+}
