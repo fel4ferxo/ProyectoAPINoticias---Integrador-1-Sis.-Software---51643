@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function(){
             if (!form.checkValidity()) {
                 event.preventDefault()
                 event.stopPropagation()
+            } else {
+                window.location.href = "inicio-sesion.html";
             }
             form.classList.add('was-validated')
             }, false)

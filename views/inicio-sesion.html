@@ -10,12 +10,14 @@
 <body>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row border rounded-5 p-3 bg-white shadow box-area">
+            <!--Panel izquierdo-->
             <div class="col-md-6 left-box rounded-4 d-flex justify-content-center align-items-center flex-column" style="background-color: #257ABF;">
                 <div class="featured-image">
                     <img src="../images/Chasky_News__3_-removebg-preview.png" class="img-fluid" >
                 </div>
                 <p class="text-white fs-2">CHASKY NEWS</p>
             </div>
+            <!--Panel derecho-->
             <div class="col-md-6 right-box">
                 <form class="needs-validation" action="#" id="formLogin" novalidate>
                     <div class="row align-items-center">
@@ -35,6 +37,7 @@
                                 <small>¿No tienes cuenta? <a href="registro.html">Regístrate</a></small>                            
                             </div>
                         </div>
+                        <div class="text-danger d-none" id="mensaje-error">Usuario inválido</div>
                         <div class="input-group mb-3">
                             <button type="submit" value="logearse" class="btn btn-lg btn-primary w-100 fs-8">Iniciar sesión</button>
                         </div>

@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         option.textContent = region;
         regionSelect.appendChild(option);
     });
+    
+    
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -37,8 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const dropdownToggle = document.querySelector('#userDropdown');
@@ -63,19 +63,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    const newsData = [
-        { id: 1, title: 'Noticia 1', image: 'path/to/image1.jpg', timeline: [
-            { date: '2024-01-01', content: 'Evento importante 1' },
-            { date: '2024-02-15', content: 'Evento importante 2' }
-        ]},
-        { id: 2, title: 'Noticia 2', image: 'path/to/image2.jpg', timeline: [
-            { date: '2024-03-01', content: 'Evento importante 1' },
-            { date: '2024-04-10', content: 'Evento importante 2' }
-        ]}
-        // Añade más datos de noticias aquí
-    ];
+    const newsData = [{
+            id: 1,
+            categoria: 'Cultura',
+            portal: 'El Comercio', 
+            titular: 'Titular',
+            subtitulo: 'Subtítulo',
+            nombreAutor: 'Nombre del autor',
+            fechaPublicacion: '24 de octubre 2024',
+            imagen: 'https://via.placeholder.com/600x300',
+            contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.'},
+        {
+            id: 2,
+            categoria: 'Cultura', 
+            portal: 'El Comercio', 
+            titular: 'Titular',
+            subtitulo: 'Subtítulo',
+            nombreAutor: 'Nombre del autor',
+            fechaPublicacion: '24 de octubre 2024',
+            imagen: 'https://via.placeholder.com/600x300',
+            contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.'}
+        ];
 
     const newsContainer = document.getElementById('news-cards-container');
 
@@ -86,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = `
             <div class="card" data-news-id="${news.id}">
                 <div class="card-inner">
-                    <img src="${news.image}" alt="${news.title}" class="card-img-top">
+                    <img src="${news.imagen}" alt="${news.titular}" class="card-img-top">
                     <div class="card-content">
-                        <h5 class="card-title">${news.title}</h5>
+                        <h5 class="card-title">${news.titular}</h5>
                         <p class="card-text">Haga clic para ver más detalles.</p>
                     </div>
                 </div>
@@ -105,102 +114,58 @@ document.addEventListener('DOMContentLoaded', () => {
             const news = newsData.find(item => item.id == newsId);
 
             if (news) {
+                document.getElementById('cabecera').innerHTML = '';
+                document.getElementById('cuerpo').innerHTML = '';
+
                 // Configurar el título y contenido del modal
-                document.getElementById('newsModalLabel').textContent = news.title;
+                document.getElementById('cabecera').insertAdjacentHTML('beforeEnd', `
+                    <nav class="navbar">
+                            <div class="container-fluid">
+                                <a class="navbar-brand text-white" href="#">
+                                <img src="../images/Chasky_News__3_-removebg-preview.png" alt="LogoChasky" width="120" height="120" class="d-inline-block align-text-center">
+                                ${news.categoria}
+                                </a>
+                            </div>
+                    </nav>
+                `);
 
-                // Crear el contenido de la línea de tiempo
-                const timelineContent = news.timeline.map(item => `
-                    <li class="timeline-item">
-                        <div class="timeline-content">
-                            <h6>${item.date}</h6>
-                            <p>${item.content}</p>
+                const contenedorArticulo = document.getElementById('cuerpo');
+                contenedorArticulo.insertAdjacentHTML('beforeEnd', `
+                    <div class="news-outlet text-center">
+                            <p>Portal de origen: <span>${news.portal}</span></p>
                         </div>
-                    </li>
-                `).join('');
+                        <div class="text-center">
+                            <h1>${news.titular}</h1>
+                            <h3 class="drophead">${news.subtitulo}</h3>
+                        </div>
 
-                document.getElementById('timeline').innerHTML = `
-                    <ul class="timeline">
-                        ${timelineContent}
-                    </ul>
-                `;
+                        <div class="text-center my-4">
+                            <img src="${news.imagen}" alt="Imagen de la noticia" class="img-fluid">
+                        </div>
 
-                // Mostrar el modal
-                const modalElement = document.getElementById('newsModal');
-                modalElement.classList.add('show');
-                modalElement.style.display = 'block';
-                modalElement.removeAttribute('aria-hidden');
-                modalElement.setAttribute('aria-modal', 'true');
-                document.body.style.overflow = 'hidden'; // Previene el scroll de fondo
+                        <hr>
+                        <div class="author-date">
+                            <p><strong><i class="fa-solid fa-user"></i> ${news.nombreAutor}</strong></p>
+                            <p><em>Publicado el: ${news.fechaPublicacion}</em></p>
+                        </div>
+                        <hr>  
+                        <div class="mt-4">
+                            <p>${news.contenido}</p>
+                    </div>
+                `);
+                
+                const modal = document.getElementById('modal-articulo');
+                modal.showModal();
 
-                // Cerrar el modal al hacer clic en el botón de cerrar o fuera del modal
-                modalElement.querySelector('.btn-close').addEventListener('click', () => {
-                    closeModal(modalElement);
-                });
-
-                modalElement.addEventListener('click', (e) => {
-                    if (e.target === modalElement) {
-                        closeModal(modalElement);
+                modal.addEventListener('click', (e) =>{
+                    if (e.target === modal){   
+                        modal.close();
                     }
                 });
             }
         }
     });
-
-    function closeModal(modalElement) {
-        modalElement.classList.remove('show');
-        modalElement.style.display = 'none';
-        modalElement.setAttribute('aria-hidden', 'true');
-        modalElement.removeAttribute('aria-modal');
-        document.body.style.overflow = ''; // Restaura el scroll del fondo
-    }
 });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Datos de ejemplo para la línea de tiempo
-    const newsData = [
-        {
-            title: "Noticia 1",
-            events: [
-                { date: "2024-01-01", content: "Evento 1 de Noticia 1" },
-                { date: "2024-01-15", content: "Evento 2 de Noticia 1" }
-            ]
-        },
-        {
-            title: "Noticia 2",
-            events: [
-                { date: "2024-02-01", content: "Evento 1 de Noticia 2" },
-                { date: "2024-02-15", content: "Evento 2 de Noticia 2" }
-            ]
-        }
-        // Agrega más noticias y eventos aquí según sea necesario
-    ];
 
-    // Selecciona todas las tarjetas
-    const cards = document.querySelectorAll('.card');
-
-    cards.forEach((card, index) => {
-        card.addEventListener('click', function() {
-            const news = newsData[index]; // Aquí se usa el índice para obtener los datos de la noticia correspondiente
-            const modalTitle = document.querySelector('#newsModalLabel');
-            const timelineContainer = document.querySelector('#timeline');
-
-            modalTitle.textContent = news.title;
-            timelineContainer.innerHTML = generateTimelineHTML(news.events);
-
-            const modal = new bootstrap.Modal(document.getElementById('newsModal'));
-            modal.show();
-        });
-    });
-
-    function generateTimelineHTML(events) {
-        return events.map(event => `
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <h6>${event.date}</h6>
-                    <p>${event.content}</p>
-                </div>
-            </div>
-        `).join('');
-    }
-});
