@@ -1,0 +1,46 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row border rounded-5 p-3 bg-white shadow box-area">
+        <!--Panel izquierdo-->
+        <div class="col-md-6 left-box rounded-4 d-flex justify-content-center align-items-center flex-column" style="background-color: #257ABF;">
+            <div class="featured-image">
+                <img src="../images/Chasky_News__3_-removebg-preview.png" class="img-fluid" >
+            </div>
+            <p class="text-white fs-2">CHASKY NEWS</p>
+        </div>
+        <!--Panel derecho-->
+        <div class="col-md-6 right-box">
+            <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" novalidate>
+                <div class="row align-items-center">
+                    <div class="header-text mb-4">
+                        <h2 class="text-lg-center">¡Bienvenido!</h2>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="correo" type="email" class="form-control form-control-lg bg-light fs-8" placeholder="Correo electrónico" formControlName="correo" [ngClass]="{'is-invalid': f['correo'].touched && f['correo'].invalid, 'is-valid': f['correo'].touched && f['correo'].valid}" required>
+                        <div class="invalid-feedback" *ngIf="f['correo'].touched && f['correo'].errors">
+                          <div *ngIf="f['correo'].errors['required']">Ingrese un correo válido</div>
+                          <div *ngIf="f['correo'].errors['invalidEmail']">Correo no registrado</div>
+                        </div>
+                        <div *ngIf="f['correo'].touched && f['correo'].valid" class="valid-feedback"></div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input id="password" type="password" class="form-control form-control-lg bg-light fs-8" placeholder="Contraseña" formControlName="password" [ngClass]="{'is-invalid': f['password'].touched && f['password'].invalid, 'is-valid': f['password'].touched && f['password'].valid}" required>
+                        <div class="invalid-feedback" *ngIf="f['password'].touched && f['password'].errors">
+                          <div *ngIf="f['password'].errors['required']">Ingrese una contraseña válida</div>
+                          <div *ngIf="f['password'].errors['invalidPassword']">Contraseña incorrecta</div>
+                        </div>
+                        <div *ngIf="f['password'].touched && f['password'].valid" class="valid-feedback"></div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="forgot text-secondary">
+                            <small>¿No tienes cuenta? <a href="registro.html">Regístrate</a></small>                            
+                        </div>
+                    </div>
+                    <div class="text-danger d-none" id="mensaje-error">Usuario inválido</div>
+                    <div class="input-group mb-3">
+                      <button type="submit" value="iniciar-sesion" class="btn btn-lg btn-primary w-100 fs-8" [disabled]="formLogin.invalid">Iniciar Sesion</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>        
+  </div>
