@@ -1,3 +1,4 @@
+//TODO: Reeescribir los últimos test para que verifique el LocalStorage
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -33,6 +34,7 @@ describe('InicioSesionComponent', () => {
     expect(component.formLogin.valid).toBeFalse();
   });
   it('La cuenta debe estar registrada', () => {
+
     llenarFormulario({
       correo: 'no@example.com',
       password: '123'

@@ -1,0 +1,18 @@
+body{
+    background: #ececec;
+}
+.box-area{
+    width: 930px;
+}
+.img-fluid{
+    width: 250px;
+}
+.right-box{
+    padding:40px 30px 40px 40px;
+}
+.text-white{
+    font-weight: 600;
+}
+.text-lg-center{
+    font-weight: 700;
+}

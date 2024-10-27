@@ -44,9 +44,36 @@ export class RegistroComponent {
   }
   get f() { return this.registroForm.controls; }
 
+
   onSubmit(){
-    if (this.registroForm.valid){
+    if (this.registroForm.valid) {
+      const usuarioRegistrado = {
+          nombre: this.registroForm.get('nombre')?.value,
+          correo: this.registroForm.get('correo')?.value,
+          numeroCuenta: this.registroForm.get('numeroCuenta')?.value,
+          password: this.registroForm.get('password')?.value
+      };
+
+      const isLocalData = localStorage.getItem("usuarioRegistrado");
+      let localArray = [];
+
+      if (isLocalData != null) {
+          // Ensure that the existing data is an array
+          try {
+              localArray = JSON.parse(isLocalData);
+              if (!Array.isArray(localArray)) {
+                  localArray = [localArray];
+              }
+          } catch (error) {
+              localArray = [];
+          }
+      }
+
+      localArray.push(usuarioRegistrado);
+      localStorage.setItem('usuarioRegistrado', JSON.stringify(localArray));
+
+      // Navigate to login page
       this.router.navigate(['/inicio-sesion']);
-    }
+  }
   }
 }

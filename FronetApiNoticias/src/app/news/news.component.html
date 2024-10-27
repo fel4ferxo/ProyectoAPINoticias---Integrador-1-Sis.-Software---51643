@@ -1,1 +1,119 @@
-<p>news works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Chaskynews</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/user-dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" routerLink="/news">Noticias</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Categorías</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Configuración</a>
+                </li>
+            </ul>
+        </div>
+        <div class="dropdown ms-3">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="./assets/imagenes/user.png.jpg" alt="Usuario" class="user-icon">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="#">Ver perfil</a></li>
+                <li><a class="dropdown-item" routerLink="/inicio-sesion">Cerrar sesión</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-2">
+            <!-- Espacio vacío a la izquierda -->
+        </div>
+        <div class="col-8 main-content">
+            <h5><i class="fa-solid fa-filter"></i>Filtros</h5>
+                <div class="container mt-4 mb-4 justify-content-center align-items-center">
+                    <form role="search" class="d-flex" id="barraBusqueda" (ngSubmit)="filtrarNoticias()">
+                        <input type="text" class="form-control me-2 d-flex" placeholder="Ingrese un títular" aria-label="Search" name="titularBuscar" [(ngModel)]="titularBuscar">
+                        <button class="btn-primary btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </div>
+            <!-- Área de filtros -->
+            <div id="filter-area">
+                <form id="filters-form" (ngSubmit)="filtrarNoticias()">
+                    <div class="row">
+                        <div class="col-2">
+                            <label for="filter-category" class="form-label">Categoría</label>
+                            <select id="filter-category" class="form-select" [(ngModel)]="categoriaBuscar" name="categoriaBuscar">
+                                <option value=""></option>
+                                <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+                            </select>   
+                        </div>
+                        <div class="col-2">
+                            <label for="filter-region" class="form-label">Región</label>
+                            <select id="filter-region" class="form-select" [(ngModel)]="regionBuscar" name="regionBuscar">
+                                <option value=""></option>
+                                <option *ngFor="let region of regiones" [value]="region">{{ region }}</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <label for="filter-author" class="form-label">Autor</label>
+                            <input type="text" id="filter-author" class="form-control" [(ngModel)]="autorBuscar" name="autorBuscar">
+                        </div>
+                        <div class="col-2">
+                            <label for="filter-start-year" class="form-label">Año Inicio</label>
+                            <input type="number" id="filter-start-year" class="form-control" value="2024" min="2000" max="2100"[(ngModel)]="inicioAnoBuscar" name="inicioAnoBuscar">
+                        </div>
+                        <div class="col-2">
+                            <label for="filter-end-year" class="form-label">Año Fin</label>
+                            <input type="number" id="filter-end-year" class="form-control" value="2024" min="2000" max="2100" [(ngModel)]="finAnoBuscar" name="finAnoBuscar">
+                        </div>
+                        <div class="col-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <hr class="ms-2" style="flex: 1;">
+
+            <div class="row" id="news-cards-container">
+                <!-- Las cards se agregarán aquí mediante JavaScript -->
+                 <div class="col-md-4" *ngFor="let news of noticiasFiltradas">
+                    <div class="card" (click)="openNewsModal(news)">
+                        <img [src]="news.imagen" [alt]="news.titular" class="card-img-top">
+                        <div class="card-content">
+                            <h5 class="card-title">{{news.titular}}</h5>
+                            <p class="card-text">Haga click para ver más detalles</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+        </div>
+        <div class="col-2">
+            <!-- Espacio vacío a la derecha -->
+        </div>
+    </div>
+</div>
+<!--Modal del articulo-->
+<dialog id="modal-articulo">
+    <div class="article-container contenedor-articulo">
+        <!--En este div va la cabecera del model, el lugar donde se muestra la imagen y la categoria-->
+        <div class="container-fluid cabecera-articulo" id="cabecera" style="background-color: #257abf;">
+        </div>     
+        <div class="container-fluid article-container contenido-articulo" id="cuerpo">
+        <!--En este div va el contenido del artículo en sí:  Portal original, titular, subtitulo, autor, fecha de publicación y cuerpo-->
+        </div>
+    </div>
+</dialog>
+<footer>
+    <div class="container text-center py-3">
+        <p>&copy; 2024 Chaskynews. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
