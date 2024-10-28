@@ -83,7 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nombreAutor: 'Nombre del autor',
             fechaPublicacion: '24 de octubre 2024',
             imagen: 'https://via.placeholder.com/600x300',
-            contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.'}
+            contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`
+        }
         ];
 
     const newsContainer = document.getElementById('news-cards-container');

@@ -1,8 +1,8 @@
+//TODO: Reeescribir los últimos test para que verifique el LocalStorage
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegistroComponent } from './registro.component';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RegistroComponent', () => {
   let component: RegistroComponent;
@@ -11,7 +11,7 @@ describe('RegistroComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule],
+      imports: [ReactiveFormsModule],
       declarations: [RegistroComponent],
       providers: [{ provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } }]
     }).compileComponents();

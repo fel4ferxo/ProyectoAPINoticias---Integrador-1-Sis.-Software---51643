@@ -1,0 +1,21 @@
+body{
+    background: #ececec;
+}
+.box-area{
+    width: 930px;
+}
+.text-white{
+    font-weight: 600;
+}
+.text-lg-center{
+    font-weight: 700;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.right-box{
+    padding:40px 30px 40px 40px;
+}
