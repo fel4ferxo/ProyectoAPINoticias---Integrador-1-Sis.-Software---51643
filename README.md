@@ -1,7 +1,7 @@
 # ProyectoAPINoticias---Integrador-1-Sis.-Software---51643
 ## Proyecto de vista de noticias: Chasky news.
 
-![LogoChaskyNews](FronetApiNoticias\public\assets\imagenes\logoActualizado.png)
+![logoActualizado](https://github.com/user-attachments/assets/60d05b73-e3e8-428c-a0ae-54284103a116)
 
 El siguiente proyecto pretende servir como una plataforma de noticias dirigida a personas que deseen seguir una historia completa. El proyecto está construido principalmente usando el framework **Angular 18** para el ___Front-End___ y **Spring boot** para el manejo del ___Back-End___. Asimismo, utiliza una API externa, NewsAPI, para la recolección de las noticias.
 
