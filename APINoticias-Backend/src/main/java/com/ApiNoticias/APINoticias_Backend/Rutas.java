@@ -16,4 +16,8 @@ public class Rutas {
     String noticia(@PathVariable int id,@PathVariable String fuente){
         return "primera ruta "+id+" fuente :"+fuente;
     }
+    @GetMapping("/Registro/{id}/{pasword}")
+    String registro_usuario(@PathVariable int id,@PathVariable String fuente){
+        return "primera ruta "+id+" fuente :"+fuente;
+    }
 }
