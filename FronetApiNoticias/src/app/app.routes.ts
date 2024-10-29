@@ -24,6 +24,7 @@ export const routes: Routes = [
         //Componentes que aparecen solo si estás logeado
         path: 'news',
         component: NewsComponent,
+        canActivate: [AuthGuard],
         title: 'feed',
         children:[
             {
