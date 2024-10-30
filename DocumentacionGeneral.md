@@ -99,3 +99,53 @@ Intimamente relacionado con el componente anterior, forma parte del _feed_ dentr
 * Cuerpo del artículo
 
 Actualmente los datos que toman las tarjetas y el artículo son estáticos, a futuro los datos se recibirán desde un archivo JSON guardado en nuestra base de datos.
+
+# Implementación del Sistema en Clever Cloud para Chasky News
+
+## 1. Crear la Organización en Clever Cloud
+
+1. Iniciar sesión en [Clever Cloud](https://www.clever-cloud.com/).
+2. En el menú lateral, hacer clic en **Add an organization**.
+3. Completar los campos requeridos:
+   - **Nombre de la Organización**: `Chasky News`
+   - **Descripción** (opcional): `Sistema de gestión de noticias para la organización Chasky News`
+4. Confirmar la creación de la organización.
+
+---
+
+## 2. Crear y Configurar la Base de Datos
+
+1. Desde el panel de Clever Cloud, seleccionar **Create an application**.
+2. Elegir la opción **Database** en lugar de **Application**.
+3. Seleccionar el tipo de base de datos (ejemplo: MySQL).
+4. Configurar los detalles de la base de datos:
+   - **Nombre de la Base de Datos**: `bfqbqkxgaslrjtwpr6wn`
+   - **Versión**: Seleccionar la versión de MySQL deseada (8.0 en tu caso).
+   - **Plan**: Seleccionar un plan adecuado para las necesidades del proyecto.
+5. Crear la base de datos y tomar nota de los detalles de conexión (host, puerto, nombre de la base de datos, usuario y contraseña).
+
+---
+
+## 3. Configuración de los Accesos para Colaboradores
+
+1. Navegar a la sección de **Members** de la organización **Chasky News**.
+2. Invitar a los miembros del equipo:
+   - Hacer clic en **Invite a member**.
+   - Introducir el correo electrónico de cada colaborador.
+   - Asignar roles según sea necesario:
+     - **Admin**: Para usuarios que administrarán aplicaciones y bases de datos.
+     - **Collaborator**: Para usuarios que solo necesitan acceso a la base de datos o aplicaciones específicas.
+3. Confirmar la invitación; los colaboradores recibirán un correo electrónico para aceptar la invitación.
+
+---
+
+## 4. Conexión del Backend al ChaskyNewsDB
+
+### Configuración en GitHub Codespace (Java Backend)
+
+1. En el archivo de configuración de la aplicación (ejemplo: `application.properties` en Spring Boot):
+
+   spring.datasource.url=jdbc:mysql://bfqbqkxgaslrjtwpr6wn-mysql.services.clever-cloud.com:3306/bfqbqkxgaslrjtwpr6wn
+   spring.datasource.username=um7owh6xrefyzh8q
+   spring.datasource.password=949KhdTBJHfFtEVrUND4
+   spring.jpa.hibernate.ddl-auto=update
