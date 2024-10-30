@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterModule} from'@angular/router';
-import {FontAwesomeModule} from'@fortawesome/angular-fontawesome'
+import {FontAwesomeModule} from'@fortawesome/angular-fontawesome';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 interface News{
   id: number;
   categoria: string;
@@ -82,7 +84,12 @@ export class NewsComponent implements OnInit{
     this.cdr.detectChanges();
   }
 
-  constructor(private cdr: ChangeDetectorRef){};
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService){};
+
+  onLogout(){
+    this.authService.setLoggedIn(false);
+    this.router.navigate(['/inicio-sesion'])
+  }
 
   ngOnInit(): void {
     this.noticiasFiltradas = [...this.newsData];

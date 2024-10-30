@@ -16,7 +16,7 @@ export class RegistroComponent {
   constructor(private fb: FormBuilder, private router: Router) {
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
-      correo: ['', [Validators.required, this.restrictedEmailValidator]],
+      correo: ['', Validators.required],
       password: ['', Validators.required],
       confirmacionPassword: ['', Validators.required],
       opcionesPago: ['', Validators.required],
@@ -31,17 +31,13 @@ export class RegistroComponent {
       return value.length === length ? null : { exactLength: { requiredLength: length, actualLength: value.length } };
     };
   }
-  // Validator for matching passwords
+
   passwordsMatchValidator(group: FormGroup) {
     const password = group.get('password')?.value;
     const confirmacionPassword = group.get('confirmacionPassword')?.value;
     return password === confirmacionPassword ? null : { mismatch: true };
   }
   
-  restrictedEmailValidator(control: AbstractControl): ValidationErrors | null {
-    const forbiddenEmail = "test@example.com";
-    return control.value === forbiddenEmail ? { invalidEmail: true }: null;
-  }
   get f() { return this.registroForm.controls; }
 
 
@@ -51,7 +47,9 @@ export class RegistroComponent {
           nombre: this.registroForm.get('nombre')?.value,
           correo: this.registroForm.get('correo')?.value,
           numeroCuenta: this.registroForm.get('numeroCuenta')?.value,
-          password: this.registroForm.get('password')?.value
+          password: this.registroForm.get('password')?.value,
+          monto: 5,
+          tipoSuscripcion: 'Estandar'
       };
 
       const isLocalData = localStorage.getItem("usuarioRegistrado");
