@@ -10,8 +10,13 @@ describe('InicioSesionComponent', () => {
   let fixture: ComponentFixture<InicioSesionComponent>;
   let router: Router;
   beforeEach(async () => {
+    const mockCuenta = [{correo: "test@example.com", password: "1234"}];
+    spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+      if(key === 'usuarioRegistrado') return JSON.stringify(mockCuenta);
+      return null;
+    });
     await TestBed.configureTestingModule({
-      imports: [InicioSesionComponent, ReactiveFormsModule, AppComponent]
+      imports: [InicioSesionComponent, ReactiveFormsModule, AppComponent],
     })
     .compileComponents();
 
@@ -34,20 +39,19 @@ describe('InicioSesionComponent', () => {
     expect(component.formLogin.valid).toBeFalse();
   });
   it('La cuenta debe estar registrada', () => {
-
     llenarFormulario({
       correo: 'no@example.com',
       password: '123'
     })
     fixture.detectChanges();
-    expect(component.formLogin.valid).toBeFalse();
+    expect(component.formLogin.errors?.['invalidEmail']).toBeTruthy();
   });
   it('La contraseña debe corresponder a la cuenta', () => {
     llenarFormulario({
       correo: 'test@example.com',
-      password: '1234'
+      password: 'ab'
     })
     fixture.detectChanges();
-    expect(component.formLogin.valid).toBeTrue();
+    expect(component.formLogin.errors?.['invalidPassword']).toBeTruthy();
   });
 });
