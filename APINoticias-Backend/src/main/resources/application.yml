@@ -1,3 +1,14 @@
 logging:
     level:
         com.ApiNoticias.APINoticias_Backend: debug
+spring:
+    application:
+        name: crup_bd_api_noticia
+datasource:
+    my-connection:
+        jdbc-url: jdbc:mysql://localhost:3306/bd_api_noticias
+        username: root
+        password: ?!hg8>Dh,y)4
+        maximum-pool-size: 20
+        pool-name: "crud-api"
+        auto-commit: true

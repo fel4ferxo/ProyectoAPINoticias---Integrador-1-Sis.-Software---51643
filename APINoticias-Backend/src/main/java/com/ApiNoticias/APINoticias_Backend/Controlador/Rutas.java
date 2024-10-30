@@ -1,4 +1,4 @@
-package com.ApiNoticias.APINoticias_Backend;
+package com.ApiNoticias.APINoticias_Backend.Controlador;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
