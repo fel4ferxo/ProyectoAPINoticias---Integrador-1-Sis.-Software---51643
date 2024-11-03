@@ -10,14 +10,14 @@ public class Usuario {
     private String metodo_pago;
     private String nuemro_ccuenta;
 
-    public Usuario(String name, long id, String apelldio_p, String apellido_m, String correo, String metodo_pago, String telefono, String nuemro_ccuenta) {
-        this.name = name;
+    public Usuario(long id, String name, String apelldio_p, String apellido_m, String correo, String telefono, String metodo_pago, String nuemro_ccuenta) {
         this.id = id;
+        this.name = name;
         this.apelldio_p = apelldio_p;
         this.apellido_m = apellido_m;
         this.correo = correo;
-        this.metodo_pago = metodo_pago;
         this.telefono = telefono;
+        this.metodo_pago = metodo_pago;
         this.nuemro_ccuenta = nuemro_ccuenta;
     }
 
