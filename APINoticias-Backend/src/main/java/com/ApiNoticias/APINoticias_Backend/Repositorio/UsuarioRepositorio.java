@@ -39,6 +39,23 @@ public class UsuarioRepositorio {
         parametrosUsuario.addValue("nro_cuenta",newUsuario.getNuemro_ccuenta());
         return insertusuario.executeAndReturnKey(parametrosUsuario).longValue();
     }
+    public void modificarUsuario(Usuario usuarioModificado) {
+        String sql = "UPDATE usuario SET name = :name, apellido_p = :apellido_p, "
+                + "apellido_m = :apellido_m, correo = :correo, telefono = :telefono, "
+                + "metodo_pago = :metodo_pago, nro_cuenta = :nro_cuenta WHERE idusuario = :id";
+
+        MapSqlParameterSource parametrosUsuario = new MapSqlParameterSource();
+        parametrosUsuario.addValue("id", usuarioModificado.getId()); // ID del usuario a modificar
+        parametrosUsuario.addValue("name", usuarioModificado.getName());
+        parametrosUsuario.addValue("apellido_p", usuarioModificado.getApelldio_p());
+        parametrosUsuario.addValue("apellido_m", usuarioModificado.getApellido_m());
+        parametrosUsuario.addValue("correo", usuarioModificado.getCorreo());
+        parametrosUsuario.addValue("telefono", usuarioModificado.getTelefono());
+        parametrosUsuario.addValue("metodo_pago", usuarioModificado.getMetodo_pago());
+        parametrosUsuario.addValue("nro_cuenta", usuarioModificado.getNuemro_ccuenta());
+
+        namedParameterJdbcTemplate.update(sql, parametrosUsuario);
+    }
     public static class usuarioMap implements RowMapper<Usuario> {
 
         @Override

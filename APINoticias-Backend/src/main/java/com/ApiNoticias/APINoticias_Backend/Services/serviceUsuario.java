@@ -20,4 +20,7 @@ public class serviceUsuario {
     public long setUsuario(Usuario newUsuario) {
         return repositorio.createUsuario(newUsuario);
     }
+    public void updateUsuarui(Usuario usuarioModificado){
+     this.repositorio.modificarUsuario(usuarioModificado);
+    }
 }
