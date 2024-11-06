@@ -45,7 +45,7 @@ export class NewsComponent implements OnInit{
 
 
   getNoticias():void{
-    const apiURL = 'https://newsapi.org/v2/top-headlines?language=en&apiKey=KEY';
+    const apiURL = 'https://newsapi.org/v2/top-headlines?language=en&apiKey=APIKEY';
     let idContador= 1;
     this.http.get<{articles: any[]}>(apiURL).subscribe({
       next: (response) => {
