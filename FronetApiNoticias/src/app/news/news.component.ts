@@ -1,10 +1,14 @@
+//TODO: Crear una función para limpiar los datos recibidos en el 
+
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterModule} from'@angular/router';
 import {FontAwesomeModule} from'@fortawesome/angular-fontawesome';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { HttpClient} from '@angular/common/http';
+
 interface News{
   id: number;
   categoria: string;
@@ -15,6 +19,7 @@ interface News{
   fechaPublicacion: string;
   imagen: string;
   contenido: string;
+  urlNoticia: string;
 }
 
 @Component({
@@ -22,7 +27,7 @@ interface News{
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './news.component.html',
-  styleUrl: './news.component.css'  
+  styleUrl: './news.component.css',
 })
 
 export class NewsComponent implements OnInit{
@@ -34,7 +39,35 @@ export class NewsComponent implements OnInit{
   finAnoBuscar: number | null = null;
   categorias = ['Tecnología', 'Salud', 'Finanzas', 'Deportes', 'Cultura'];
   regiones = ['América del Norte', 'América del Sur', 'Europa', 'Asia', 'África'];
-  newsData: News[] = [
+
+  private http = inject(HttpClient);
+  newsData: News[] | null = null;
+
+
+  getNoticias():void{
+    const apiURL = 'https://newsapi.org/v2/top-headlines?language=en&apiKey=KEY';
+    let idContador= 1;
+    this.http.get<{articles: any[]}>(apiURL).subscribe({
+      next: (response) => {
+        this.newsData = response.articles.map((article) => ({
+          id: idContador++,
+          categoria: 'General', 
+          portal: article.source?.name || '', 
+          titular: article.title,
+          subtitulo: article.description,
+          nombreAutor: article.author,
+          fechaPublicacion: article.publishedAt,
+          imagen: article.urlToImage,
+          contenido: article.content,
+          urlNoticia: article.url
+        }));
+
+        this.noticiasFiltradas = [...this.newsData];
+        this.cdr.detectChanges();
+      }
+    });
+  }
+  /* newsData: News[] = [
     {
       id: 1,
       categoria: 'Cultura', 
@@ -44,7 +77,9 @@ export class NewsComponent implements OnInit{
       nombreAutor: 'Nombre del autor',
       fechaPublicacion: '24 de octubre 2024',
       imagen: 'https://via.placeholder.com/600x300',
-      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`
+      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`,
+      urlNoticia: ''
+
     },{
       id: 2,
       categoria: 'Deporte', 
@@ -54,34 +89,39 @@ export class NewsComponent implements OnInit{
       nombreAutor: 'Nombre del autor',
       fechaPublicacion: '24 de octubre 2024',
       imagen: 'https://via.placeholder.com/600x300',
-      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`
+      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`,
+      urlNoticia: ''
     }
-  ];
+  ]; */
 
   noticiasFiltradas: News[] = [];
   filtrarNoticias(): void{
-    this.noticiasFiltradas = this.newsData.filter((news) => {
-      const matchesTitular = news.titular.toLowerCase().includes(this.titularBuscar.toLowerCase());
-      const matchesCategoria = this.categoriaBuscar ? news.categoria === this.categoriaBuscar : true;
-      const matchesAutor = news.nombreAutor.toLowerCase().includes(this.autorBuscar.toLowerCase());
-      const añoPublicacion = parseInt(news.fechaPublicacion.slice(-4), 10)
-      const matchesAñoInicio = this.inicioAnoBuscar !== null ? añoPublicacion >= this.inicioAnoBuscar : true;
-      const matchesAñoFinal = this.finAnoBuscar !== null ? añoPublicacion <= this.finAnoBuscar : true;
-
-      const isMatch = matchesTitular && matchesCategoria && matchesAutor && matchesAñoInicio && matchesAñoFinal;
-
-      console.log(`News Title: ${news.titular}`);
-      console.log(`Matches Titular: ${matchesTitular}`);
-      console.log(`Matches Categoria: ${matchesCategoria}`);
-      console.log(`Matches Autor: ${matchesAutor}`);
-      console.log(`Matches Año Inicio: ${matchesAñoInicio}`);
-      console.log(`Matches Año Final: ${matchesAñoFinal}`);
-      console.log(`Is Match: ${isMatch}`);
-
-      return isMatch;
-    })
-    console.log('Filtered News:', this.noticiasFiltradas);
-    this.cdr.detectChanges();
+    if(this.newsData !== null){
+      this.noticiasFiltradas = this.newsData.filter((news) => {
+        const matchesTitular = news.titular.toLowerCase().includes(this.titularBuscar.toLowerCase());
+        const matchesCategoria = this.categoriaBuscar ? news.categoria === this.categoriaBuscar : true;
+        const matchesAutor = news.nombreAutor.toLowerCase().includes(this.autorBuscar.toLowerCase());
+        const añoPublicacion = parseInt(news.fechaPublicacion.slice(-4), 10)
+        const matchesAñoInicio = this.inicioAnoBuscar !== null ? añoPublicacion >= this.inicioAnoBuscar : true;
+        const matchesAñoFinal = this.finAnoBuscar !== null ? añoPublicacion <= this.finAnoBuscar : true;
+  
+        const isMatch = matchesTitular && matchesCategoria && matchesAutor && matchesAñoInicio && matchesAñoFinal;
+  
+        console.log(`News Title: ${news.titular}`);
+        console.log(`Matches Titular: ${matchesTitular}`);
+        console.log(`Matches Categoria: ${matchesCategoria}`);
+        console.log(`Matches Autor: ${matchesAutor}`);
+        console.log(`Matches Año Inicio: ${matchesAñoInicio}`);
+        console.log(`Matches Año Final: ${matchesAñoFinal}`);
+        console.log(`Is Match: ${isMatch}`);
+  
+        return isMatch;
+      })
+      console.log('Filtered News:', this.noticiasFiltradas);
+      this.cdr.detectChanges();
+      console.log(this.newsData);
+      console.log(this.noticiasFiltradas);
+    }
   }
 
   constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService){};
@@ -92,7 +132,10 @@ export class NewsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.noticiasFiltradas = [...this.newsData];
+    this.getNoticias();
+    /* if(this.newsData !==null){
+      this.noticiasFiltradas = [...this.newsData];
+    } */
   };
   openNewsModal(news: News){
     const modal = document.getElementById('modal-articulo') as HTMLDialogElement;
@@ -129,6 +172,7 @@ export class NewsComponent implements OnInit{
       <hr>
       <div class="mt-4">
         <p>${news.contenido}</p>
+        <a [href]="${news.urlNoticia}">¡Lea el artículo completo aquí!</a>
       </div>
     `;
     modal.showModal();
