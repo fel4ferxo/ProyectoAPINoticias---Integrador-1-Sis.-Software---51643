@@ -45,7 +45,7 @@ export class NewsComponent implements OnInit{
   noticiasFiltradas: News[] = [];
   noticiasOriginales: News[] = [];
   getNoticias():void{
-    const apiURL = 'https://newsapi.org/v2/everything?q=peru&apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
+    const apiURL = 'https://newsapi.org/v2/everything?q=peru&apiKey=KEY';
     let idContador= 1;
     this.http.get<{articles: any[]}>(apiURL).subscribe({
       next: (response) => {
@@ -100,7 +100,7 @@ export class NewsComponent implements OnInit{
     if(this.newsData !== null){
       const base = 'https://newsapi.org/v2/';
       let endpoint = 'everything?';
-      const llave = 'apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
+      const llave = 'apiKey=KEY';
       const filtrosParametros: string [] = [];
       if(this.titularBuscar){
         filtrosParametros.push(`q=${encodeURIComponent(this.titularBuscar)}&searchIn=title`);
