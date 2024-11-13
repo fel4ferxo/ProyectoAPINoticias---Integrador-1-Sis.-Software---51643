@@ -91,3 +91,48 @@ dialog::backdrop {
 .container{
     padding: 0;
 }
+
+.p-contextmenu ul{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 0;
+    margin: 0;
+}
+
+.p-contextmenu .p-menuitem-link{
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+.p-contextmenu .p-menuitem-link:hover{
+    background-color: #e0e0e9;
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.p-contextmenu{
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+}
+
+.sticky-toolbar{
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;
+    background-color: white;
+    padding: 10px;
+}
+.sticky-toolbar .p-button{
+    border-radius: 10px;
+}
+.sticky-toolbar .p-toolbar-group-right span{
+    margin-right: 10px;
+}

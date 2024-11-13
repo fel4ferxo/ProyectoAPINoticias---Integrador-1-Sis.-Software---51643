@@ -77,11 +77,20 @@
             </div>
             
             <hr class="ms-2" style="flex: 1;">
+            <p-toolbar *ngIf="toolbarVisible" styleClass="sticky-toolbar">
+                <div class="p-toolbar-group-left">
+                    <p-button icon="pi pi-times" (click)="cancelarSeleccion()" label="Cancelar"/>
+                </div>
+                <div class="p-toolbar-group-right">
+                    <span>{{arrayTemporal.length}} noticias seleccionadas</span>
+                    <p-button label="Confirmar" icon="pi pi-check" (click)="agregarNoticiasTimeline()"/>
+                </div>
+            </p-toolbar>
 
             <div class="row" id="news-cards-container">
                 <!-- Las cards se agregarán aquí mediante JavaScript -->
                  <div class="col-md-4" *ngFor="let news of noticiasFiltradas">
-                    <div class="card" (click)="openNewsModal(news)">
+                    <div class="card" (click)="openNewsModal(news)" (contextmenu)="selectedNews = news; cm.show($event)">
                         <img [src]="news.imagen" [alt]="news.titular" class="card-img-top">
                         <div class="card-content">
                             <h5 class="card-title">{{news.titular}}</h5>
@@ -96,6 +105,9 @@
         </div>
     </div>
 </div>
+<!--Menú de opciones-->
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
 <!--Modal del articulo-->
 <dialog id="modal-articulo">
     <div class="article-container contenedor-articulo">
