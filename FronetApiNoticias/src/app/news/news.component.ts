@@ -1,7 +1,7 @@
 //TODO: Crear una función para limpiar los datos recibidos en el 
 
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {RouterModule} from'@angular/router';
 import {FontAwesomeModule} from'@fortawesome/angular-fontawesome';
@@ -9,7 +9,12 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { HttpClient} from '@angular/common/http';
 import { formatDate } from '@angular/common';
-interface News{
+import { MenuItem } from 'primeng/api';
+import { ContextMenuModule} from 'primeng/contextmenu';
+import { DataService } from '../services/data.service';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ButtonModule } from 'primeng/button';
+export interface News{
   id: number;
   categoria: string;
   portal: string;
@@ -21,13 +26,13 @@ interface News{
   contenido: string;
   urlNoticia: string;
 }
-
 @Component({
   selector: 'app-news',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule, ContextMenuModule, ToolbarModule, ButtonModule],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 
 export class NewsComponent implements OnInit{
@@ -39,6 +44,13 @@ export class NewsComponent implements OnInit{
   finAnoBuscar: number | null = null;
   categorias = ['General', 'Negocios', 'Entretenimiento', 'Salud', 'Ciencia', 'Deportes', 'Tecnología'];
   pais: string='';
+
+
+  dataEnviada: News[] = [];
+  items: MenuItem[]=[];
+  selectedNews: News | null = null;
+  arrayTemporal: any[] = [];
+  toolbarVisible: boolean = false;
 
   private http = inject(HttpClient);
   newsData: News[] | null = null;
@@ -68,32 +80,6 @@ export class NewsComponent implements OnInit{
       }
     });
   }
-  /* newsData: News[] = [
-    {
-      id: 1,
-      categoria: 'Cultura', 
-      portal: 'El Comercio', 
-      titular: 'A',
-      subtitulo: 'Subtítulo',
-      nombreAutor: 'Nombre del autor',
-      fechaPublicacion: '24 de octubre 2024',
-      imagen: 'https://via.placeholder.com/600x300',
-      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`,
-      urlNoticia: ''
-
-    },{
-      id: 2,
-      categoria: 'Deporte', 
-      portal: 'El Comercio', 
-      titular: 'B',
-      subtitulo: 'Subtítulo',
-      nombreAutor: 'Nombre del autor',
-      fechaPublicacion: '24 de octubre 2024',
-      imagen: 'https://via.placeholder.com/600x300',
-      contenido: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sollicitudin, lorem at dignissim gravida, eros sapien vehicula dolor, non lobortis lacus lorem sit amet lorem. Integer porttitor nisl sit amet dui malesuada, ut euismod quam fermentum. Cras non nibh eu eros euismod vehicula non et lacus.`,
-      urlNoticia: ''
-    }
-  ]; */
 
   
   filtrarNoticias(): void{
@@ -222,19 +208,71 @@ export class NewsComponent implements OnInit{
       }
     });
   }
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService){};
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService, private dataService: DataService){};
+
+  sendData(){
+    if(this.dataEnviada.length > 0){
+      this.dataService.setData(this.dataEnviada);  
+      console.log(this.dataEnviada);
+      this.router.navigate(['/timeline']);
+    }else{
+      console.log('Nada que enviar');
+    }
+    
+  }
 
   onLogout(){
-    this.authService.setLoggedIn(false);
+    this.authService.logOut();
     this.router.navigate(['/inicio-sesion'])
   }
 
   ngOnInit(): void {
     this.getNoticias();
+    this.items = [
+      {label: 'Agregar a línea de tiempo', icon: 'pi pi-sitemap', command: () => this.seleccionarNoticias(this.selectedNews)}
+    ];
+
     /* if(this.newsData !==null){
       this.noticiasFiltradas = [...this.newsData];
     } */
   };
+
+  seleccionarNoticias(selectedCardData: any){
+    if(!selectedCardData){
+      console.log("No items seleccionados");
+      return;
+    }
+
+    if(!this.toolbarVisible){
+      this.toolbarVisible = true; 
+      this.cdr.detectChanges();
+    }
+    console.log(this.toolbarVisible)
+      this.arrayTemporal.push(selectedCardData);
+      console.log("selected news: ", selectedCardData);
+      console.log("current selection", this.arrayTemporal);
+    
+  }
+
+  cancelarSeleccion(){
+    this.arrayTemporal = [];
+    this.toolbarVisible = false;
+  }
+
+  agregarNoticiasTimeline():void{
+    this.dataEnviada = [...this.arrayTemporal];
+    this.toolbarVisible = false;
+    console.log('Data enviada: ', this.dataEnviada);
+    this.sendData();
+      /* if(this.selectedNews){
+        const newsItem = this.noticiasFiltradas.find(news => news.id === this.selectedNews!.id)
+        if(newsItem){
+          this.dataEnviada.push(newsItem);
+          console.log(this.dataEnviada);
+        }
+      } */
+  }
+
   openNewsModal(news: News){
     const modal = document.getElementById('modal-articulo') as HTMLDialogElement;
     const cabecera = document.getElementById('cabecera')!;

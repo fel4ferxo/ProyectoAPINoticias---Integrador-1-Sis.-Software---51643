@@ -4,6 +4,7 @@ import { RegistroComponent } from './registro/registro.component';
 import { NewsComponent } from './news/news.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
+import { TimelineComponent } from './timeline/timeline.component';
 export const routes: Routes = [
     {
         path:'',
@@ -21,7 +22,6 @@ export const routes: Routes = [
         title: 'Regístrese'
     },
     {
-        //Componentes que aparecen solo si estás logeado
         path: 'news',
         component: NewsComponent,
         canActivate: [AuthGuard],
@@ -32,6 +32,12 @@ export const routes: Routes = [
                 component: UserDashboardComponent
             }
         ]
+    },
+    {
+        path: 'timeline',
+        component: TimelineComponent,
+        title: 'Línea de tiempo'
     }
+
 
 ];

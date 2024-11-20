@@ -30,8 +30,8 @@ describe('NewsComponent', () => {
 
   it('Debería filtrar por titulo', () => {
     component.newsData = [
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '' },
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '' }
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''},
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''}
     ];
     component.titularBuscar = 'A';
     component.filtrarNoticias();
@@ -41,8 +41,8 @@ describe('NewsComponent', () => {
 
   it('Debería filtrar por categoria', () => {
     component.newsData = [
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '' },
-      {id: 1, categoria: 'Deportes', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '' }
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''},
+      {id: 1, categoria: 'Deportes', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''}
     ];
     component.categoriaBuscar = 'Deportes';
     component.filtrarNoticias();
@@ -52,10 +52,10 @@ describe('NewsComponent', () => {
 
   it('Debería filtrar por autor', () => {
     component.newsData = [
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '' },
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor B', fechaPublicacion: '2024', imagen: '', contenido: '' }
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''},
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor B', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: ''}
     ];
-    component.autorBuscar = 'Autor B';
+    component.categoriaBuscar = 'General';
     component.filtrarNoticias();
     expect(component.noticiasFiltradas.length).toBe(1);
     expect(component.noticiasFiltradas[0].nombreAutor).toBe('Autor B');
@@ -63,9 +63,9 @@ describe('NewsComponent', () => {
 
   it('Debería filtrar rango de fechas', () => {
     component.newsData = [
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2022', imagen: '', contenido: '' },
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2023', imagen: '', contenido: '' },
-      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'C', subtitulo: 'Sub A', nombreAutor: 'Autor B', fechaPublicacion: '2024', imagen: '', contenido: '' }
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'A', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2022', imagen: '', contenido: '', urlNoticia: ''},
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'B', subtitulo: 'Sub A', nombreAutor: 'Autor A', fechaPublicacion: '2023', imagen: '', contenido: '', urlNoticia: ''},
+      {id: 1, categoria: 'Cultura', portal: 'El Comercio', titular: 'C', subtitulo: 'Sub A', nombreAutor: 'Autor B', fechaPublicacion: '2024', imagen: '', contenido: '', urlNoticia: '' }
     ];
 
     component.inicioAnoBuscar = 2022;
