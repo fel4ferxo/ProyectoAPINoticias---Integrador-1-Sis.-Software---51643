@@ -1,0 +1,38 @@
+<div class="card">
+    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+        <ng-template pTemplate="marker" let-event>
+            <span 
+                class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1" 
+                [style]="{ 'background-color': event.color }">
+                    <i [class]="event.icon"></i>
+            </span>
+        </ng-template>
+        <ng-template pTemplate="content" let-event let-i="index">
+            <p-card>
+                <ng-container *ngIf="!editingHeader[i]; else editHeaderTemplate">
+                    <div (dblclick)="toggleEdit(i, 'header')">{{event.cabecera}}</div>
+                </ng-container>
+                <ng-template #editHeaderTemplate>
+                    <input [(ngModel)]="event.cabecera" (blur)="toggleEdit(i, 'header')" (keyup.enter)="toggleEdit(i, 'header')">
+                </ng-template>
+
+                <ng-container *ngIf="!editingSubheader[i]; else editSubheaderTemplate">
+                    <div (dblclick)="toggleEdit(i, 'subheader')">{{event.fecha}}</div>
+                </ng-container>
+                <ng-template #editSubheaderTemplate>
+                    <input [(ngModel)]="event.fecha" (blur)="toggleEdit(i, 'subheader')" (keyup.enter)="toggleEdit(i, 'subheader')">
+                </ng-template>
+
+                <img [src]="event.imagen" [alt]="event.cabecera" class="shadow-2">
+
+                <ng-container *ngIf="!editingSubtitle[i]; else editSubtitleTemplate">
+                    <div (dblclick)="toggleEdit(i, 'subtitle')">{{event.subtitular}}</div>
+                </ng-container>
+                <ng-template #editSubtitleTemplate>
+                    <input [(ngModel)]="event.subtitular" (blur)="toggleEdit(i, 'subtitle')" (keyup.enter)="toggleEdit(i, 'subtitle')">
+                </ng-template>
+            </p-card>
+            <p-button label="Leer artículo" [text]="true" (click)="abrirLink(event.articulo)"/>
+        </ng-template>
+    </p-timeline>
+</div>
