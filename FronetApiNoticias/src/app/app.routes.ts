@@ -5,6 +5,8 @@ import { NewsComponent } from './news/news.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { TimelineComponent } from './timeline/timeline.component';
+import { OverviewComponent } from './overview/overview.component';
+
 export const routes: Routes = [
     {
         path:'',
@@ -34,10 +36,18 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'overview',
+        component: OverviewComponent,
+        title: 'Tus líneas'
+    },
+    {
         path: 'timeline',
+        redirectTo: 'overview',
+        pathMatch: 'full'
+    },
+    {
+        path: 'timeline/:id',
         component: TimelineComponent,
         title: 'Línea de tiempo'
     }
-
-
 ];

@@ -45,7 +45,7 @@ export class NewsComponent implements OnInit{
   categorias = ['General', 'Negocios', 'Entretenimiento', 'Salud', 'Ciencia', 'Deportes', 'Tecnología'];
   pais: string='';
 
-
+  receiverId = '';
   dataEnviada: News[] = [];
   items: MenuItem[]=[];
   selectedNews: News | null = null;
@@ -57,7 +57,7 @@ export class NewsComponent implements OnInit{
   noticiasFiltradas: News[] = [];
   noticiasOriginales: News[] = [];
   getNoticias():void{
-    const apiURL = 'https://newsapi.org/v2/everything?q=peru&apiKey=KEY';
+    const apiURL = 'https://newsapi.org/v2/everything?q=peru&apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
     let idContador= 1;
     this.http.get<{articles: any[]}>(apiURL).subscribe({
       next: (response) => {
@@ -86,7 +86,7 @@ export class NewsComponent implements OnInit{
     if(this.newsData !== null){
       const base = 'https://newsapi.org/v2/';
       let endpoint = 'everything?';
-      const llave = 'apiKey=KEY';
+      const llave = 'apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
       const filtrosParametros: string [] = [];
       if(this.titularBuscar){
         filtrosParametros.push(`q=${encodeURIComponent(this.titularBuscar)}&searchIn=title`);
@@ -212,9 +212,9 @@ export class NewsComponent implements OnInit{
 
   sendData(){
     if(this.dataEnviada.length > 0){
-      this.dataService.setData(this.dataEnviada);  
+      this.dataService.setData(this.receiverId, this.dataEnviada);  
       console.log(this.dataEnviada);
-      this.router.navigate(['/timeline']);
+      this.router.navigate(['/timeline', this.receiverId]);
     }else{
       console.log('Nada que enviar');
     }
@@ -223,7 +223,6 @@ export class NewsComponent implements OnInit{
 
   onLogout(){
     this.authService.logOut();
-    this.router.navigate(['/inicio-sesion'])
   }
 
   ngOnInit(): void {

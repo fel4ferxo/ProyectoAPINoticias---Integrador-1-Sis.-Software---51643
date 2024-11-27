@@ -42,6 +42,7 @@ export class RegistroComponent {
 
 
   onSubmit(){
+    console.log('OnSubmit');
     if (this.registroForm.valid) {
       const usuarioRegistrado = {
           nombre: this.registroForm.get('nombre')?.value,
