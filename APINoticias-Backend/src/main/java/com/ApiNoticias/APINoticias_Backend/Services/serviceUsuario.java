@@ -23,4 +23,8 @@ public class serviceUsuario {
     public void updateUsuarui(Usuario usuarioModificado){
      this.repositorio.modificarUsuario(usuarioModificado);
     }
+    public boolean autenticarUsuario(Usuario validarUsuario) {
+        Usuario usuario = repositorio.validarUsuario(validarUsuario.getCorreo(),validarUsuario.getPassword());
+        return usuario != null; // Retorna true si existe
+    }
 }

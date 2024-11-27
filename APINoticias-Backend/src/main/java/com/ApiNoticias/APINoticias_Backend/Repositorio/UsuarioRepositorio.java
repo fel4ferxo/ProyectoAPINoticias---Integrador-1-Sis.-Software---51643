@@ -11,23 +11,42 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
+/**
+ * Repositorio para gestionar las operaciones relacionadas con los usuarios en la base de datos.
+ * Proporciona métodos para realizar CRUD y autenticación.
+ */
 @Repository
 public class UsuarioRepositorio {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert insertusuario;
     private final usuarioMap suario_Map=new usuarioMap();
-
+    /**
+     * Constructor que inicializa las herramientas de acceso a la base de datos.
+     *
+     * @param namedParameterJdbcTemplate herramienta para ejecutar consultas con parámetros nombrados.
+     * @param dataSource                 fuente de datos para inicializar el inserto simple.
+     */
     public UsuarioRepositorio(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
                               DataSource dataSource) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.insertusuario = new SimpleJdbcInsert(dataSource).withTableName("usuario")
                 .usingGeneratedKeyColumns("idusuario");
     }
+    /**
+     * Obtiene todos los usuarios de la tabla "usuario".
+     *
+     * @return una lista de usuarios existentes en la base de datos.
+     */
     public List<Usuario> getAllUsuarios(){
         String sql="select * from usuario;";
         return namedParameterJdbcTemplate.query(sql,suario_Map);
     }
+    /**
+     * Inserta un nuevo usuario en la base de datos.
+     *
+     * @param newUsuario el usuario que se desea crear.
+     * @return el ID generado para el nuevo usuario.
+     */
     public long createUsuario(Usuario newUsuario){
         MapSqlParameterSource parametrosUsuario=new MapSqlParameterSource();
         parametrosUsuario.addValue("name",newUsuario.getName());
@@ -37,12 +56,18 @@ public class UsuarioRepositorio {
         parametrosUsuario.addValue("telefono",newUsuario.getTelefono());
         parametrosUsuario.addValue("metodo_pago",newUsuario.getMetodo_pago());
         parametrosUsuario.addValue("nro_cuenta",newUsuario.getNuemro_ccuenta());
+        parametrosUsuario.addValue("password",newUsuario.getPassword());
         return insertusuario.executeAndReturnKey(parametrosUsuario).longValue();
     }
+    /**
+     * Modifica un usuario existente en la base de datos.
+     *
+     * @param usuarioModificado el usuario con los datos actualizados.
+     */
     public void modificarUsuario(Usuario usuarioModificado) {
         String sql = "UPDATE usuario SET name = :name, apellido_p = :apellido_p, "
                 + "apellido_m = :apellido_m, correo = :correo, telefono = :telefono, "
-                + "metodo_pago = :metodo_pago, nro_cuenta = :nro_cuenta WHERE idusuario = :id";
+                + "metodo_pago = :metodo_pago, nro_cuenta = :nro_cuenta ,password = :password  WHERE idusuario = :id";
 
         MapSqlParameterSource parametrosUsuario = new MapSqlParameterSource();
         parametrosUsuario.addValue("id", usuarioModificado.getId()); // ID del usuario a modificar
@@ -53,11 +78,38 @@ public class UsuarioRepositorio {
         parametrosUsuario.addValue("telefono", usuarioModificado.getTelefono());
         parametrosUsuario.addValue("metodo_pago", usuarioModificado.getMetodo_pago());
         parametrosUsuario.addValue("nro_cuenta", usuarioModificado.getNuemro_ccuenta());
+        parametrosUsuario.addValue("password", usuarioModificado.getPassword());
 
         namedParameterJdbcTemplate.update(sql, parametrosUsuario);
     }
-    public static class usuarioMap implements RowMapper<Usuario> {
+    /**
+     * Valida las credenciales de un usuario (correo y contraseña).
+     *
+     * @param correo   el correo del usuario a validar.
+     * @param password la contraseña del usuario a validar.
+     * @return un objeto Usuario si las credenciales son válidas, o null si no lo son.
+     */
+    public Usuario validarUsuario(String correo, String password) {
+        String sql = "SELECT * FROM usuario WHERE correo = :correo AND password = :password";
+        MapSqlParameterSource parametros = new MapSqlParameterSource();
+        parametros.addValue("correo", correo);
+        parametros.addValue("password", password);
 
+        List<Usuario> usuarios = namedParameterJdbcTemplate.query(sql, parametros, suario_Map);
+        return usuarios.isEmpty() ? null : usuarios.get(0); // Retorna el primer usuario si existe
+    }
+    /**
+     * Mapeador para convertir resultados de consultas SQL en objetos Usuario.
+     */
+    public static class usuarioMap implements RowMapper<Usuario> {
+        /**
+         * Convierte una fila del ResultSet en un objeto Usuario.
+         *
+         * @param rs     el ResultSet que contiene los datos de la consulta.
+         * @param rowNum el número de la fila actual.
+         * @return un objeto Usuario con los datos de la fila.
+         * @throws SQLException si ocurre un error al leer los datos del ResultSet.
+         */
         @Override
         public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
             long id=rs.getLong("idusuario");
@@ -68,7 +120,8 @@ public class UsuarioRepositorio {
             String telefono=rs.getString("telefono");
             String metodo_pago=rs.getString("metodo_pago");
             String numero_cuenta=rs.getString("nro_cuenta");
-            return new Usuario(id,name,apellidop,apellido_m,correo,telefono,metodo_pago,numero_cuenta);
+            String password=rs.getString("password");
+            return new Usuario(id,name,apellidop,apellido_m,correo,telefono,metodo_pago,numero_cuenta,password);
         }
     }
 }
