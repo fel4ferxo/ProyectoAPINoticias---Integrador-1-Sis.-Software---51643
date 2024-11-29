@@ -1,5 +1,3 @@
-//TODO: Crear una función para limpiar los datos recibidos en el 
-
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +14,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Timeline } from '../overview/overview.component';
+//Interfaz de la noticia
 export interface News{
   id: number;
   categoria: string;
@@ -47,7 +46,9 @@ export class NewsComponent implements OnInit{
   categorias = ['General', 'Negocios', 'Entretenimiento', 'Salud', 'Ciencia', 'Deportes', 'Tecnología'];
   pais: string='';
 
+  //Noticias que serán agregadas a la línea de tiempo
   dataEnviada: News[] = [];
+  //Elementos del menu contextual que aparece cuando le das click derecho a una noticia
   items: MenuItem[]=[];
   selectedNews: News | null = null;
   arrayTemporal: any[] = [];
@@ -59,6 +60,12 @@ export class NewsComponent implements OnInit{
   newsData: News[] | null = null;
   noticiasFiltradas: News[] = [];
   noticiasOriginales: News[] = [];
+  /**
+   * Función que hace una solicitud inicial para mostrar noticias apenas cargue la página.
+   * Estas noticias terminan siendo asignadas a dos arrays: 
+   * noticiasFiltradas (las noticias que son mostradas después de cada búsqueda), y 
+   * noticias originales (array que contiene las noticias que muestra las primeras noticias que aparecieron para no gastar una solicitud de la API)
+   */
   getNoticias():void{
     const apiURL = 'https://newsapi.org/v2/everything?q=peru&apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
     let idContador= 1;
@@ -84,6 +91,10 @@ export class NewsComponent implements OnInit{
     });
   }
 
+  /**
+   * Función que saca todas las líneas de tiempo del usuario
+   */
+
   getTimelines(){
     if(typeof localStorage !== 'undefined'){
       this.timelines = this.getLocalStorageDate<Timeline[]>('timeline') || [];
@@ -92,16 +103,27 @@ export class NewsComponent implements OnInit{
     }
   }
 
+  /**
+   * Función general que saca datos de LocalStorage
+   * @param {string} key - Es el nombre de la tabla de donde sacar los datos
+   * @returns {JSON.parse(data) | null} - Regresa los datos que haya encontrado en caso de que existan
+   */
+
   getLocalStorageDate<T>(key: string): T | null {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   }
   
+  /**
+   * Función que hace solicitudes a la API para la búsqueda y filtrado de noticias
+   */
   filtrarNoticias(): void{
     if(this.newsData !== null){
       const base = 'https://newsapi.org/v2/';
+      //El endpoint es una variable ya que la busqueda por categorías no es aplicable a "everything", solo "top-headlines"
       let endpoint = 'everything?';
       const llave = 'apiKey=ea5efb6dc68249c9a47dbb2e70bbfd90';
+      //Array que contiene todos los filtros aplicados
       const filtrosParametros: string [] = [];
       if(this.titularBuscar){
         filtrosParametros.push(`q=${encodeURIComponent(this.titularBuscar)}&searchIn=title`);
@@ -154,10 +176,13 @@ export class NewsComponent implements OnInit{
           }
         }
       }
+      //Se hace una solicitud en caso de que hayan filtros
       if(filtrosParametros.length !== 0){
+        //Se forma la URL de la solicitud
         const apiURL = `${base}${endpoint}${filtrosParametros.join('&')}&${llave}`;
         let idContador: number = 1;
         console.log(apiURL);
+        //Se extraen todas las noticias del resultado
         this.http.get<{articles: any[]}>(apiURL).subscribe({
           next: (response) => {
             this.newsData = response.articles.map((article) => ({
@@ -172,7 +197,7 @@ export class NewsComponent implements OnInit{
               contenido: article.content,
               urlNoticia: article.url
             }));
-    
+            //Se asigna un nuevo valor a las noticiasFiltradas, las noticias que son mostradas en la pantalla
             this.noticiasFiltradas = [...this.newsData];
             this.limpiarNoticias();
             this.cdr.detectChanges();
@@ -181,35 +206,11 @@ export class NewsComponent implements OnInit{
       } else{
         this.noticiasFiltradas = [...this.noticiasOriginales];
       }
-      
-
-
-      /* this.noticiasFiltradas = this.newsData.filter((news) => {
-        const matchesTitular = news.titular.toLowerCase().includes(this.titularBuscar.toLowerCase());
-        const matchesCategoria = this.categoriaBuscar ? news.categoria === this.categoriaBuscar : true;
-        const matchesAutor = news.nombreAutor.toLowerCase().includes(this.dominioBuscar.toLowerCase());
-        const añoPublicacion = parseInt(news.fechaPublicacion.slice(-4), 10)
-        const matchesAñoInicio = this.inicioAnoBuscar !== null ? añoPublicacion >= this.inicioAnoBuscar : true;
-        const matchesAñoFinal = this.finAnoBuscar !== null ? añoPublicacion <= this.finAnoBuscar : true;
-  
-        const isMatch = matchesTitular && matchesCategoria && matchesAutor && matchesAñoInicio && matchesAñoFinal;
-  
-        console.log(`News Title: ${news.titular}`);
-        console.log(`Matches Titular: ${matchesTitular}`);
-        console.log(`Matches Categoria: ${matchesCategoria}`);
-        console.log(`Matches Autor: ${matchesAutor}`);
-        console.log(`Matches Año Inicio: ${matchesAñoInicio}`);
-        console.log(`Matches Año Final: ${matchesAñoFinal}`);
-        console.log(`Is Match: ${isMatch}`);
-  
-        return isMatch;
-      })
-      console.log('Filtered News:', this.noticiasFiltradas);
-      this.cdr.detectChanges();
-      console.log(this.newsData);
-      console.log(this.noticiasFiltradas); */
     }
   }
+  /**
+   * Función que remueve noticias defectuosas, formatea la fecha de publicación, agrega el campo de autor si falta y agrega una imagen de placeholder en caso de que la imagen original sea inaccesible
+   */
   limpiarNoticias(){
     this.noticiasFiltradas = this.noticiasFiltradas.filter(noticias => noticias.contenido !== '[Removed]');
     this.noticiasFiltradas.forEach(function(noticias){
@@ -223,8 +224,19 @@ export class NewsComponent implements OnInit{
       }
     });
   }
+  /**
+   * constructor: Inicializa recursos necesarios para el funcionamiento del resto de funciones
+   * @param {ChangeDetectorRef} cdr - Inicializa ChangeDetectorRef, un detector de cambios en la página, permiten que se vean sin tener que recargar la página.
+   * @param {Router} router -Inicializa Router, un servicio predeterminado de Angular que nos permite desplazarnos entre componentes
+   * @param {AuthService} authService  - Inicializa AuthService, el servicio que cheque que el usuario este logeado para permitir el acceso.
+   * @param {DataService} dataService  - Inicializa DataService, el servicio que nos permite mandar datos entre componentes.
+   */
   constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService, private dataService: DataService){};
 
+  /**
+   * Función que manda las noticias seleccionadas por el usuario para unirlas a una línea de tiempo
+   * @param {string} receiverId - ID de la línea de tiempo
+   */
   sendData(receiverId:string){
     if(this.dataEnviada.length > 0){
       this.dataService.setData(receiverId, this.dataEnviada);  
@@ -235,10 +247,16 @@ export class NewsComponent implements OnInit{
     }
     
   }
-
+  /**
+   * Función que cierra la sesión
+   */
   onLogout(){
     this.authService.logOut();
   }
+
+  /**
+   * Función que se ejecuta apenas se entra al componente, obtiene los datos de las noticias iniciales y de las líneas de tiempo del usuario
+   */
 
   ngOnInit(): void {
     this.getNoticias();
@@ -251,42 +269,49 @@ export class NewsComponent implements OnInit{
     } */
   };
 
+  /**
+   * Función para seleccionar noticias
+   * @param selectedCardData 
+   * @returns 
+   */
   seleccionarNoticias(selectedCardData: any){
     if(!selectedCardData){
       console.log("No items seleccionados");
       return;
     }
-
+    //Hace aparecer un menú de opciones para la selección de las noticias
     if(!this.toolbarVisible){
       this.toolbarVisible = true; 
       this.cdr.detectChanges();
     }
+
     console.log(this.toolbarVisible)
       this.arrayTemporal.push(selectedCardData);
       console.log("selected news: ", selectedCardData);
       console.log("current selection", this.arrayTemporal);
     
   }
-
+  /**
+   * Función que cancela la selección de las noticias
+   */
   cancelarSeleccion(){
     this.arrayTemporal = [];
+    //Oculta el menú de opciones
     this.toolbarVisible = false;
   }
 
-
+  /**
+   * Función que agrega las noticias seleccionadas al array final para agregarse a la línea de tiempo
+   */
   agregarNoticiasTimeline():void{
     this.dataEnviada = [...this.arrayTemporal];
     this.toolbarVisible = false;
-    /* console.log('Data enviada: ', this.dataEnviada);
-    this.sendData(); */
-      /* if(this.selectedNews){
-        const newsItem = this.noticiasFiltradas.find(news => news.id === this.selectedNews!.id)
-        if(newsItem){
-          this.dataEnviada.push(newsItem);
-          console.log(this.dataEnviada);
-        }
-      } */
   }
+
+  /**
+   * Función que hace aparecer el modal del lector de noticias
+   * @param {News} news - Noticia que se desea leer.
+   */
 
   openNewsModal(news: News){
     const modal = document.getElementById('modal-articulo') as HTMLDialogElement;
