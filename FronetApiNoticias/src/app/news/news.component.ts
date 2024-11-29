@@ -14,6 +14,8 @@ import { ContextMenuModule} from 'primeng/contextmenu';
 import { DataService } from '../services/data.service';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { Timeline } from '../overview/overview.component';
 export interface News{
   id: number;
   categoria: string;
@@ -29,7 +31,7 @@ export interface News{
 @Component({
   selector: 'app-news',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule, ContextMenuModule, ToolbarModule, ButtonModule],
+  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule, ContextMenuModule, ToolbarModule, ButtonModule, CardModule],
   templateUrl: './news.component.html',
   styleUrl: './news.component.css',
   encapsulation: ViewEncapsulation.None
@@ -45,12 +47,13 @@ export class NewsComponent implements OnInit{
   categorias = ['General', 'Negocios', 'Entretenimiento', 'Salud', 'Ciencia', 'Deportes', 'Tecnología'];
   pais: string='';
 
-  receiverId = '';
   dataEnviada: News[] = [];
   items: MenuItem[]=[];
   selectedNews: News | null = null;
   arrayTemporal: any[] = [];
   toolbarVisible: boolean = false;
+
+  timelines: Timeline[] = [];
 
   private http = inject(HttpClient);
   newsData: News[] | null = null;
@@ -81,6 +84,18 @@ export class NewsComponent implements OnInit{
     });
   }
 
+  getTimelines(){
+    if(typeof localStorage !== 'undefined'){
+      this.timelines = this.getLocalStorageDate<Timeline[]>('timeline') || [];
+    } else{
+      console.warn('localStorage not available');
+    }
+  }
+
+  getLocalStorageDate<T>(key: string): T | null {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  }
   
   filtrarNoticias(): void{
     if(this.newsData !== null){
@@ -210,11 +225,11 @@ export class NewsComponent implements OnInit{
   }
   constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService, private dataService: DataService){};
 
-  sendData(){
+  sendData(receiverId:string){
     if(this.dataEnviada.length > 0){
-      this.dataService.setData(this.receiverId, this.dataEnviada);  
+      this.dataService.setData(receiverId, this.dataEnviada);  
       console.log(this.dataEnviada);
-      this.router.navigate(['/timeline', this.receiverId]);
+      this.router.navigate(['/timeline', receiverId]);
     }else{
       console.log('Nada que enviar');
     }
@@ -230,7 +245,7 @@ export class NewsComponent implements OnInit{
     this.items = [
       {label: 'Agregar a línea de tiempo', icon: 'pi pi-sitemap', command: () => this.seleccionarNoticias(this.selectedNews)}
     ];
-
+    this.getTimelines();
     /* if(this.newsData !==null){
       this.noticiasFiltradas = [...this.newsData];
     } */
@@ -258,11 +273,12 @@ export class NewsComponent implements OnInit{
     this.toolbarVisible = false;
   }
 
+
   agregarNoticiasTimeline():void{
     this.dataEnviada = [...this.arrayTemporal];
     this.toolbarVisible = false;
-    console.log('Data enviada: ', this.dataEnviada);
-    this.sendData();
+    /* console.log('Data enviada: ', this.dataEnviada);
+    this.sendData(); */
       /* if(this.selectedNews){
         const newsItem = this.noticiasFiltradas.find(news => news.id === this.selectedNews!.id)
         if(newsItem){

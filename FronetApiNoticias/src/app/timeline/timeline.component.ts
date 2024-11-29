@@ -20,19 +20,8 @@ interface EventItem{
   imagen?: string,
   articulo?: string 
 }
-interface Noticias_timeline{
-  fk_noticias: number,
-  fk_timeline: number,
-}
 
-interface Base{
-  timeline_id: number,
-  eventos: EventItem[]
-}
-interface NoticiasBase{
-  fk_timeline: number,
-  noticias: News[]
-}
+
 
 
 @Component({
@@ -47,7 +36,7 @@ interface NoticiasBase{
 
 export class TimelineComponent implements OnInit{
   eventosBase: EventItem[]=[];
-  eventosNuevos: News[]=[];
+  eventosNuevos: EventItem[]=[];
 
   events: EventItem[]=[];
 
@@ -67,41 +56,24 @@ export class TimelineComponent implements OnInit{
     return data ? JSON.parse(data) : null;
   }
 
-  formarBase(timelineID: number): Base | null{
-    const eventos: EventItem[] = this.getLocalStorageDate<EventItem[]>("eventos") || [];
-    const timelines: Timeline[] = this.getLocalStorageDate<Timeline[]>("timeline") || [];
-    const existeTimeline = timelines.some((timeline) => timeline.id === timelineID);
-    if(!existeTimeline){
-      return null;
-    }
+  getEventos(timelineID: number): EventItem[]{
+    let eventosRegistrados: EventItem[] = [];
 
-    const eventosRelacionados= eventos.filter((nt) => nt.fk_timeline === timelineID);
-    const eventosBase: Base = {
-      timeline_id: timelineID,
-      eventos: eventosRelacionados
-    };
-    return eventosBase;
+    if(typeof localStorage !== 'undefined'){
+      const eventos: EventItem[] = this.getLocalStorageDate<EventItem[]>("eventos") || [];
+      const timelines: Timeline[] = this.getLocalStorageDate<Timeline[]>("timeline") || [];
+      const existeTimeline = timelines.some((timeline) => timeline.id === timelineID);
+      if(!existeTimeline){
+        return [];
+      }
+      eventosRegistrados= eventos.filter((nt) => nt.fk_timeline === timelineID);
+    }
+    console.log("Eventos registrados", eventosRegistrados)
+    return eventosRegistrados;
   }
 
-  formarNoticiasBase(timelineID: number): NoticiasBase | null {
+  agregarNuevosEventos(): void{
     
-    const noticias: News[] =  this.getLocalStorageDate<News[]>("noticias")|| [];
-    const noticiasTimeline: Noticias_timeline[] = this. getLocalStorageDate<Noticias_timeline[]>("noticias_timeline") || [];
-    const timelines: Timeline[] = this.getLocalStorageDate<Timeline[]>("timeline") || [];
-    
-
-    const existeTimeline = timelines.some((timeline) => timeline.id === timelineID);
-    if(!existeTimeline){
-      return null;
-    }
-
-    const noticiasRelacionadasIds= noticiasTimeline.filter((nt) => nt.fk_timeline === timelineID).map((nt)=> nt.fk_noticias);
-    const noticiasRelacionadas = noticias.filter((noticia) => noticiasRelacionadasIds.includes(noticia.id));
-    const noticiasBase: NoticiasBase = {
-      fk_timeline: timelineID,
-      noticias: noticiasRelacionadas
-    };
-    return noticiasBase;
   }
 
   toggleEdit(index: number, field: string){
@@ -121,111 +93,49 @@ export class TimelineComponent implements OnInit{
     }
   }
 
-  crearSamples(){
-    if(!localStorage.getItem('noticias')){
-      localStorage.setItem("noticias", JSON.stringify([
-        {
-          id: 1,
-          categoria: 'General',
-          portal: 'NPR',
-          titular: "Biden and Xi will meet on Saturday, the 3rd and likely final time during Biden's term",
-          subtitulo: `This is likely to be their final meeting before President Biden leaves office. Biden sees it as a chance to reflect on the "tough relationship" between the two countries, an official said.`,
-          nombreAutor: "Asma Khalid",
-          fechaPublicacion: "13-11-2024",
-          imagen: "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/4690x2638+0+275/resize/1400/quality/100/format/jpeg/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2Fed%2Fc6%2F111ac0414803a337f5ffdf027b21%2Fgettyimages-1784305652.jpg",
-          contenido: "LIMA, Peru President Biden will meet with Chinese President Xi Jinping on Saturday on the sidelines of the APEC summit in Lima, Peru, a senior U.S. administration official told reporters on Wednesday… ",
-          urlNoticia: "https://www.npr.org/2024/11/13/nx-s1-5189429/biden-xi-meeting-lima"
-        },
-        {
-          id: 2,
-          categoria: 'General',
-          portal: "ABC News",
-          titular: "AI, North Korea, Trump: What Biden and Xi discussed in their final meeting",
-          subtitulo: "President Joe Biden met with Chinese President Xi Jinping on the sidelines of the APEC conference in Lima, Peru -- their last meeting of Biden’s presidency.",
-          nombreAutor: "Michelle Stoddart, Alex Presha",
-          fechaPublicacion: "16-11-2024",
-          imagen: "https://i.abcnewsfe.com/a/73a15c5f-d404-47ad-96fd-ff4bffaf4fb2/biden-xi-rt-jt-241116_1731793368363_hpMain_16x9.jpg?w=1600",
-          contenido: "President Joe Biden met with Chinese President Xi Jinping face-to-face Saturday afternoon on the sidelines of the Asia-Pacific Economic Cooperation (APEC) conference in Lima, Peru -- their last meeti… ",
-          urlNoticia: "https://abcnews.go.com/Politics/ai-north-korea-trump-biden-xi-discussed-final/story?id=115936991"
-        },
-      ]))
-    }
-    if(!localStorage.getItem('noticias_timeline')) {
-      localStorage.setItem('noticias_timeline', JSON.stringify([
-        {
-          fk_noticias: 1,
-          fk_timeline: 1,
-        },{
-          fk_noticias: 2,
-          fk_timeline: 1,
-        }
 
-      ]))
-    }
-    if(!localStorage.getItem('eventos')){
-      localStorage.setItem('eventos', JSON.stringify([
-        {
-          id: 1,
-          fk_timeline: 1,
-          cabecera: "Biden and Xi will meet on Saturday, the 3rd and likely final time during Biden's term",
-          subtitular: `This is likely to be their final meeting before President Biden leaves office. Biden sees it as a chance to reflect on the "tough relationship" between the two countries, an official said.`,
-          fecha: "13-11-2024",
-          icono: 'pi pi-calendar',
-          color: '#FF9800',
-          imagen: "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/4690x2638+0+275/resize/1400/quality/100/format/jpeg/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2Fed%2Fc6%2F111ac0414803a337f5ffdf027b21%2Fgettyimages-1784305652.jpg",
-          articulo: "https://www.npr.org/2024/11/13/nx-s1-5189429/biden-xi-meeting-lima"
-        },
-        {
-          id: 2,
-          fk_timeline: 1,
-          cabecera: "AI, North Korea, Trump: What Biden and Xi discussed in their final meeting",
-          subtitular: "President Joe Biden met with Chinese President Xi Jinping on the sidelines of the APEC conference in Lima, Peru -- their last meeting of Biden’s presidency.",
-          fecha: "16-11-2024",
-          icono: 'pi pi-calendar',
-          color: '#FF9800',
-          imagen: "https://i.abcnewsfe.com/a/73a15c5f-d404-47ad-96fd-ff4bffaf4fb2/biden-xi-rt-jt-241116_1731793368363_hpMain_16x9.jpg?w=1600",
-          articulo: "https://abcnews.go.com/Politics/ai-north-korea-trump-biden-xi-discussed-final/story?id=115936991"
-        }
-      ]))  
-    }
-    if(!localStorage.getItem('timeline')){
-      localStorage.setItem('timeline', JSON.stringify([
-        {
-          id: 1,
-          nombre: 'Prueba',
-          fecha_creacion: '24-11-2024',
-          fecha_ultimaModificacion: '24-11-2024',
-          imagenPreview: 'https://anti-money-laundering.eu/wp-content/uploads/2024/01/news-2444778_1280.jpg'
-        }
-      ]))
+  guardarNuevosEventos(eventosExistentes: EventItem[], eventosARegistrar: EventItem[]): void{
+    const eventosTotalesAGuardar = eventosExistentes.concat(eventosARegistrar);
+    console.log("Eventos totales a guardar", eventosTotalesAGuardar);
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem('eventos', JSON.stringify(eventosTotalesAGuardar));
     }
   }
+
   ngOnInit(){
-    this.crearSamples();  
     this.route.paramMap.subscribe((params)=>{
       this.recieverId = params.get('id');
       if(this.recieverId){
+        this.eventosBase = this.getEventos(Number(this.recieverId));
+        console.log("Eventos ya existentes", this.eventosBase);
+        let contadorId = this.eventosBase.length;
         this.dataService.getData(this.recieverId).subscribe({
           next: (newsData) =>{
-            console.log('Datos recibidos: ${this.recieverId', newsData);
+            console.log('Datos recibidos:', newsData);
             this.newsData = newsData;
-            this.events = this.newsData.map(news =>({
+            this.eventosNuevos = this.newsData.map(news =>({
+              id: ++contadorId,
               cabecera: news.titular,
               subtitular: news.subtitulo,
               fecha: news.fechaPublicacion,
-              icono: 'pi pi-calendar',
+              icono: 'fa-solid fa-calendar',
               color: '#FF9800',
               imagen: news.imagen,
-              articulo: news.urlNoticia
+              articulo: news.urlNoticia,
+              fk_timeline: Number(this.recieverId)
             }))
-            this.editingHeader = Array(this.events.length).fill(false);
-            this.editingSubheader = Array(this.events.length).fill(false);
-            this.editingSubtitle = Array(this.events.length).fill(false);
-            
-            console.log('Mapeados', this.events);
+            this.guardarNuevosEventos(this.eventosBase, this.eventosNuevos);
+            console.log("Eventos nuevos", this.eventosNuevos)
           },
           error: (err) => console.error(err),
         });
+        this.events = this.getEventos(Number(this.recieverId));
+        console.log("Eventos de la linea", this.events);
+        this.editingHeader = Array(this.events.length).fill(false);
+        this.editingSubheader = Array(this.events.length).fill(false);
+        this.editingSubtitle = Array(this.events.length).fill(false);
+        
+        console.log('Mapeados', this.events);
       }
     })
     

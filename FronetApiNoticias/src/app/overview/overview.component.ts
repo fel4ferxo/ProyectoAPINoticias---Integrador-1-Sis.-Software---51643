@@ -86,6 +86,11 @@ export class OverviewComponent implements OnInit{
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   }
+
+  navegarAComponent(rutaComponente: string): void{
+    this.router.navigate([`/${rutaComponente}`]);
+  }
+
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
       if(!localStorage.getItem('timeline')){
