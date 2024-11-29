@@ -27,7 +27,7 @@ export const routes: Routes = [
         path: 'news',
         component: NewsComponent,
         canActivate: [AuthGuard],
-        title: 'feed',
+        title: 'Noticias',
         children:[
             {
                 path: 'user-dashboard',
@@ -38,6 +38,7 @@ export const routes: Routes = [
     {
         path: 'overview',
         component: OverviewComponent,
+        canActivate:[AuthGuard],
         title: 'Tus líneas'
     },
     {
@@ -47,6 +48,7 @@ export const routes: Routes = [
     },
     {
         path: 'timeline/:id',
+        canActivate:[AuthGuard],
         component: TimelineComponent,
         title: 'Línea de tiempo'
     }

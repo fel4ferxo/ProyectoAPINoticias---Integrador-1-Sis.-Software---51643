@@ -3,6 +3,7 @@ import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 //Interfaz de la línea de tiempo
 export interface Timeline{
   id: number,
@@ -79,13 +80,17 @@ export class OverviewComponent implements OnInit{
    * @param {FormBuilder} fb - Inicializa FormBuilder, este nos permite monitorear los valores y la validez del formulario, en este caso del formulario de registro de una nueva timeline
    * @param {Router} router - Inicializa Router, un servicio predeterminado de Angular que nos permite desplazarnos entre componentes
    */
-  constructor(private fb: FormBuilder, private router: Router){
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService){
     this.formLinea = this.fb.group({
       nombre: ['', Validators.required] //Establece el valor por defecto e iniciliza el validador (en este caso se asegura de que el campo no este vacio)
     });
   }
 
   get f() { return this.formLinea.controls; }
+
+  onLogOut(){
+    this.authService.logOut();
+  }
 
   showDialog(){
     this.visible = true;
