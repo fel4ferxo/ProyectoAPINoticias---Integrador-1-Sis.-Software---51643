@@ -31,6 +31,8 @@ dependencies {
 
 	// Mockito JUnit para integración con JUnit 5
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+	implementation 'org.springframework.session:spring-session-core'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

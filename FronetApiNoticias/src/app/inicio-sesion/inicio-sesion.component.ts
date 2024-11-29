@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {RouterModule} from'@angular/router';
 import { AuthService } from '../services/auth.service';
+import { UsuarioService } from '../services/usuario.service';
 @Component({
   selector: 'app-inicio-sesion',
   standalone: true,
@@ -13,56 +14,43 @@ import { AuthService } from '../services/auth.service';
 })
 export class InicioSesionComponent {
   formLogin: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  loginError: string | null = null; // Para mostrar errores al usuario
+  constructor(private UsuarioService: UsuarioService,private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.formLogin = this.fb.group({
       correo: ['', [Validators.required, this.isEmailValid.bind(this)]],
       password: ['', Validators.required],
-    }, { validator: this.isCredentialValid.bind(this)});
+    });
   }
   isEmailValid(control: AbstractControl): ValidationErrors | null {
-    if(typeof localStorage !== 'undefined') {
-      const isLocalData =  localStorage.getItem("usuarioRegistrado");
-      if(isLocalData != null){
-        const usuarios = JSON.parse(isLocalData);
-        const isUserFound =  usuarios.find((m:any)=>m.correo == control.value);
-        return isUserFound != undefined ? null : {invalidPassword: true};
-      }
-    }
-    return  {invalidEmail: true};
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(control.value) ? null : { invalidEmail: true };
   }
-  isCredentialValid(group: AbstractControl) {
-    const password = group.get('password')?.value;
-  
-    // Check if localStorage is available
-    if (typeof localStorage !== 'undefined') {
-      const isLocalData = localStorage.getItem("usuarioRegistrado");
-
-      const correoError = this.isEmailValid(group.get('correo')!);
-      if (correoError) {
-        return correoError;
-      }
-  
-      if (isLocalData != null) {
-        const contraseñas = JSON.parse(isLocalData);
-        const isPasswordValid = contraseñas.find((m: any) => m.password === password);
-        return isPasswordValid !== undefined ? null : { invalidPassword: true };
-      }
-      return { invalidPassword: true };
-    } else {
-      console.warn('localStorage is not available');
-      return { invalidPassword: true };
-    }
-  }
-   
 
   get f(){return this.formLogin.controls;}
 
 
   onSubmit(){
 
-    if (this.formLogin.valid){
-      this.authService.setLoggedIn(true);
-      this.router.navigate(['/news']);
-  }
+    if (this.formLogin.valid) {
+      const { correo, password } = this.formLogin.value;
+
+      // Consumir la API
+      this.UsuarioService.validarUsuario(correo, password).subscribe({
+        next: (usuario) => {
+          if (usuario) {
+            // Usuario válido
+            this.authService.setLoggedIn(true); // Marcar como autenticado
+            this.router.navigate(['/news']); // Redirigir
+          } else {
+            // Usuario no encontrado
+            this.loginError = 'Correo o contraseña incorrectos';
+          }
+        },
+        error: (err) => {
+          console.error('Error al validar usuario:', err);
+          this.loginError = 'Error en el servidor. Intenta de nuevo más tarde.';
+        }
+      });
+    }
 }
 }

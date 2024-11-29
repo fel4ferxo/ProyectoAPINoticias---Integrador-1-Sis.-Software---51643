@@ -45,6 +45,7 @@
           },
           "configurations": {
             "production": {
+              "sourceMap": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -56,13 +57,14 @@
                   "maximumWarning": "2kB",
                   "maximumError": "4kB"
                 }
+
               ],
               "outputHashing": "all"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false
             }
           },
           "defaultConfiguration": "production"

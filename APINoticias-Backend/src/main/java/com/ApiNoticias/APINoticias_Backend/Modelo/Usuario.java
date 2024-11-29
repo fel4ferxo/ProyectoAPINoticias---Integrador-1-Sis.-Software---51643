@@ -24,7 +24,7 @@ public class Usuario {
     }
 
     public Usuario( String name, String apelldio_p, String apellido_m, String correo, String telefono, String metodo_pago, String nuemro_ccuenta, String password) {
-        this.id = id;
+
         this.name = name;
         this.apelldio_p = apelldio_p;
         this.apellido_m = apellido_m;
@@ -33,6 +33,17 @@ public class Usuario {
         this.metodo_pago = metodo_pago;
         this.nuemro_ccuenta = nuemro_ccuenta;
         this.password=password;
+    }
+    public Usuario( long id,String name, String apelldio_p, String apellido_m, String correo, String telefono, String metodo_pago, String nuemro_ccuenta) {
+        this.id = id;
+        this.name = name;
+        this.apelldio_p = apelldio_p;
+        this.apellido_m = apellido_m;
+        this.correo = correo;
+        this.telefono = telefono;
+        this.metodo_pago = metodo_pago;
+        this.nuemro_ccuenta = nuemro_ccuenta;
+
     }
 
     public Usuario() {
