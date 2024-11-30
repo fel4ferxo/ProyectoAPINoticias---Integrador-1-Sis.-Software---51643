@@ -23,4 +23,8 @@ public class serviceUsuario {
     public void updateUsuarui(Usuario usuarioModificado){
      this.repositorio.modificarUsuario(usuarioModificado);
     }
+    public Usuario autenticarUsuario(Usuario validarUsuario) {
+       return this.repositorio.validarUsuario(validarUsuario.getCorreo(),validarUsuario.getPassword());
+
+    }
 }
