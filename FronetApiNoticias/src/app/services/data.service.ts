@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { News } from '../news/news.component';
 @Injectable({
   providedIn: 'root'
@@ -7,6 +7,9 @@ import { News } from '../news/news.component';
 
 //Este servicio permite la transmición de datos entre componentes. En este caso transporta noticias (News)
 export class DataService {
+  //Inincialización de la ID del usuario al cual se le buscaran los datos relacionados
+  private dataUsuarioID =  new Subject<string>();
+  dataUsuarioID$ = this.dataUsuarioID.asObservable();
   //Mapa que guarda la ID de la línea de tiempo a la que se va añadir las noticias, y las noticias a registrar
   private dataSources: Map<string, ReplaySubject<News[]>> = new Map();
   private initializationDataSource(id: string): ReplaySubject<News[]>{
@@ -15,6 +18,14 @@ export class DataService {
     }
     return this.dataSources.get(id)!;
   }
+  /**
+   * 
+   * @param {string} id - ID del usuario actualmente registrado
+   */
+  setId(id: string){
+    this.dataUsuarioID.next(id);
+  }
+
   /**
    * Agrega las noticias a ser registradas, esta función es utilizada por otros componentes
    * @param {string} id - ID de la línea de tiempo 

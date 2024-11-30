@@ -5,6 +5,14 @@ import { Router } from '@angular/router';
 import {RouterModule} from'@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ValidarUsuarioService } from '../services/validar-usuario.service';
+import { DataService } from '../services/data.service';
+
+export interface User{
+  id: string;
+  correo: string;
+  metodoPago: string;
+}
+
 @Component({
   selector: 'app-inicio-sesion',
   standalone: true,
@@ -13,9 +21,11 @@ import { ValidarUsuarioService } from '../services/validar-usuario.service';
   styleUrl: './inicio-sesion.component.css'
 })
 export class InicioSesionComponent {
+  usuarioAGuardar: User[] = [];
+
   formLogin: FormGroup;
   loginError: string | null = null; // Para mostrar errores al usuario
-  constructor(private ValidarUsuarioService: ValidarUsuarioService,private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(private ValidarUsuarioService: ValidarUsuarioService,private fb: FormBuilder, private router: Router, private authService: AuthService, private dataService: DataService) {
     this.formLogin = this.fb.group({
       correo: ['', [Validators.required, this.isEmailValid.bind(this)]],
       password: ['', Validators.required],
@@ -28,6 +38,20 @@ export class InicioSesionComponent {
 
   get f(){return this.formLogin.controls;}
 
+  /**
+   * Función que manda el ID a otros componentes para hacer CRUDs a la base de datos
+   * @param {string} id  - ID del usuario
+   */
+
+  sendId(id: string){
+    this.dataService.setId(id);
+  }
+
+  guardarUsuarioLocalStorage(usuario: User[]){
+    if(typeof localStorage !== 'undefined'){
+        localStorage.setItem('email', JSON.stringify(usuario));
+    }
+  }
 
   onSubmit(){
 
@@ -38,7 +62,13 @@ export class InicioSesionComponent {
       this.ValidarUsuarioService.validarUsuario(correo, password).subscribe({
         next: (usuario) => {
           if (usuario) {
-            // Usuario válido
+            this.usuarioAGuardar = usuario.map((usuarioDatos: { id: any; correo: any; metodo_pago: any; }) =>({
+              id: usuarioDatos.id,
+              correo: usuarioDatos.correo,
+              metodoPago: usuarioDatos.metodo_pago
+            }))
+            this.guardarUsuarioLocalStorage(this.usuarioAGuardar);
+            this.sendId(usuario.id);
             this.authService.setLoggedIn(true); // Marcar como autenticado
             this.router.navigate(['/news']); // Redirigir
           } else {
