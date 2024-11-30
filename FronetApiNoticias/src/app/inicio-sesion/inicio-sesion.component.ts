@@ -7,10 +7,13 @@ import { AuthService } from '../services/auth.service';
 import { ValidarUsuarioService } from '../services/validar-usuario.service';
 import { DataService } from '../services/data.service';
 
-export interface User{
-  id: string;
-  correo: string;
-  metodoPago: string;
+export class User{
+  id: string = '';
+  correo: string = '';
+  metodoPago: string = '';
+
+  constructor(){
+  }
 }
 
 @Component({
@@ -21,7 +24,7 @@ export interface User{
   styleUrl: './inicio-sesion.component.css'
 })
 export class InicioSesionComponent {
-  usuarioAGuardar: User[] = [];
+  usuarioAGuardar = new User();
 
   formLogin: FormGroup;
   loginError: string | null = null; // Para mostrar errores al usuario
@@ -47,7 +50,7 @@ export class InicioSesionComponent {
     this.dataService.setId(id);
   }
 
-  guardarUsuarioLocalStorage(usuario: User[]){
+  guardarUsuarioLocalStorage(usuario: User){
     if(typeof localStorage !== 'undefined'){
         localStorage.setItem('email', JSON.stringify(usuario));
     }
@@ -62,11 +65,9 @@ export class InicioSesionComponent {
       this.ValidarUsuarioService.validarUsuario(correo, password).subscribe({
         next: (usuario) => {
           if (usuario) {
-            this.usuarioAGuardar = usuario.map((usuarioDatos: { id: any; correo: any; metodo_pago: any; }) =>({
-              id: usuarioDatos.id,
-              correo: usuarioDatos.correo,
-              metodoPago: usuarioDatos.metodo_pago
-            }))
+            this.usuarioAGuardar.id = usuario.id ;
+            this.usuarioAGuardar.correo = usuario.correo;
+            this.usuarioAGuardar.metodoPago = usuario.metodo_pago;
             this.guardarUsuarioLocalStorage(this.usuarioAGuardar);
             this.sendId(usuario.id);
             this.authService.setLoggedIn(true); // Marcar como autenticado
