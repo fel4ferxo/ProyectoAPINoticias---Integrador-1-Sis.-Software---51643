@@ -72,8 +72,10 @@ export class RegistroComponent {
     return password === confirmacionPassword ? null : { mismatch: true };
   }
   crearUsuario() {
+    console.log(this.usuario);
     this.ValidarUsuarioService.createUsuario(this.usuario).subscribe({
       next: (response) => {
+        console.log(response);
         this.mensaje = `Usuario creado con ID: ${response}`;
         this.router.navigate(['/inicio-sesion']);
       },
