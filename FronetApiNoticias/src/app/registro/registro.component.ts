@@ -10,9 +10,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
+
+  /**
+   * Es el controlador del formulario, nos permite acceder a todos sus campos
+   * @type {FormGroup}*/ 
+
   registroForm: FormGroup;
   
-
+  /**constructor: Inicializa los valores por defecto del cuestionario y los validadores
+   * Validatores required checa que los campos no estén vacios
+   * @param {FormBuilder} fb - Inicializa FormBuilder (y AbstractControl), este nos permite monitorear los valores y la validez del formulario dependiendo de validaciones personalizadas
+   * @param {Router} router - Inicializa Router, un servicio predeterminado de Angular que nos permite desplazarnos entre componentes
+  */
+    
   constructor(private fb: FormBuilder, private router: Router) {
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
@@ -25,13 +35,25 @@ export class RegistroComponent {
     }, { validator: this.passwordsMatchValidator });
   }
 
+
+  /**
+   * Función que checa que el número de cuenta sea de 20 dígitos
+   * @param {number} length - Longitud que el número de cuenta que debe tener.
+   *
+   * @returns {(control: AbstractControl) => (ValidationErrors | null)} - validador que retorna un error (ValidationErrors) en caso de que el número de cuenta ingresado no sea de 20 dígitos
+   */
   exactLengthValidator(length: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value ? control.value.toString() : '';
       return value.length === length ? null : { exactLength: { requiredLength: length, actualLength: value.length } };
     };
   }
-
+  /**
+   * Función que checa que las contraseñas ingresadas (la que será registrada y la de confirmación) sean las mismas
+   * @param {FormGroup} group  - Es el formulario (registroForm)
+   * @returns {ValidationErrors | null}  - Validador que retorna el error (mismatch: true) si son distintas
+   * mismatch: true activa a su vez la aparición del texto que indica la invalidez de las contraseñas en el HTML
+   */
   passwordsMatchValidator(group: FormGroup) {
     const password = group.get('password')?.value;
     const confirmacionPassword = group.get('confirmacionPassword')?.value;
@@ -40,8 +62,11 @@ export class RegistroComponent {
   
   get f() { return this.registroForm.controls; }
 
-
+  /**
+   * Función que registra los datos ingresados una vez que el formulario sea valido y se pueda enviar
+   */
   onSubmit(){
+    console.log('OnSubmit');
     if (this.registroForm.valid) {
       const usuarioRegistrado = {
           nombre: this.registroForm.get('nombre')?.value,
@@ -51,26 +76,30 @@ export class RegistroComponent {
           monto: 5,
           tipoSuscripcion: 'Estandar'
       };
-
-      const isLocalData = localStorage.getItem("usuarioRegistrado");
+      //Se guarda en local storage, para eso se tiene que actualizar el registro
+      const isLocalData = localStorage.getItem("usuarioRegistrado"); //Verifica que hayan registros
+      /**
+     * Array temporal al que se asigna los registros existentes
+     */
       let localArray = [];
 
       if (isLocalData != null) {
-          // Ensure that the existing data is an array
+          // Verifica que haya registros
           try {
               localArray = JSON.parse(isLocalData);
               if (!Array.isArray(localArray)) {
-                  localArray = [localArray];
+                  localArray = [localArray]; //De existir un registro, asigna su valor a localArray.
               }
           } catch (error) {
-              localArray = [];
+              localArray = []; //De no existir, el localArray se mantiene vacio
           }
       }
 
+      //Se agregan los valores a registrar a localArray y se vuelven a registrar dentro de localStorage
       localArray.push(usuarioRegistrado);
       localStorage.setItem('usuarioRegistrado', JSON.stringify(localArray));
 
-      // Navigate to login page
+      //Se redirecciona al usuario a la página de inicio de sesión
       this.router.navigate(['/inicio-sesion']);
   }
   }

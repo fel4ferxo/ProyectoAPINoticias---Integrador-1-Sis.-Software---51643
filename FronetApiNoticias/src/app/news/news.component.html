@@ -83,7 +83,7 @@
                 </div>
                 <div class="p-toolbar-group-right">
                     <span>{{arrayTemporal.length}} noticias seleccionadas</span>
-                    <p-button label="Confirmar" icon="pi pi-check" (click)="agregarNoticiasTimeline()"/>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLinea" (click)="agregarNoticiasTimeline()"><i class="fa-solid fa-check"></i> Confirmar</button>
                 </div>
             </p-toolbar>
 
@@ -119,6 +119,29 @@
         </div>
     </div>
 </dialog>
+
+<!--Modal de selección de línea de tiempo-->
+<div class="modal fade" id="modalLinea" tabindex="-1" aria-labelledby="modalLineaModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Escoja una línea de tiempo</h5>
+            </div>
+            <div class="modal-body">
+                <div class="contenedor-timelines">
+                    <p-card *ngFor="let timeline of timelines" [header]="timeline.nombre" [subheader]="timeline.fecha_ultimaModificacion" [style]="{width: '240px'}" (click)="sendData(timeline.id.toString())" data-bs-dismiss="modal"> 
+                        <ng-template pTemplate="header">
+                            <img [src]="timeline.imagenPreview" alt="Línea de tiempo">
+                        </ng-template>
+                    </p-card>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <footer>
     <div class="container text-center py-3">
         <p>&copy; 2024 Chaskynews. Todos los derechos reservados.</p>

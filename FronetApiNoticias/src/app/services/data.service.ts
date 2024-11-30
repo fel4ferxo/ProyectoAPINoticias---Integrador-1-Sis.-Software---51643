@@ -1,16 +1,38 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { News } from '../news/news.component';
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
-  private dataSource = new ReplaySubject<News[]>(1);
-  data$ = this.dataSource.asObservable();
 
-  setData(data: News[]){
-    console.log('Verificacion servicio', data)
-    this.dataSource.next(data);
+//Este servicio permite la transmición de datos entre componentes. En este caso transporta noticias (News)
+export class DataService {
+  //Mapa que guarda la ID de la línea de tiempo a la que se va añadir las noticias, y las noticias a registrar
+  private dataSources: Map<string, ReplaySubject<News[]>> = new Map();
+  private initializationDataSource(id: string): ReplaySubject<News[]>{
+    if(!this.dataSources.has(id)){
+      this.dataSources.set(id, new ReplaySubject<News[]>(1));
+    }
+    return this.dataSources.get(id)!;
+  }
+  /**
+   * Agrega las noticias a ser registradas, esta función es utilizada por otros componentes
+   * @param {string} id - ID de la línea de tiempo 
+   * @param {News[]} data  - Array de noticias a ser agregadas
+   */
+  setData(id: string, data: News[]): void{
+    const dataSource = this.initializationDataSource(id);
+    console.log('Verificacion servicio', data, id)
+    dataSource.next(data);
+  }
+  /**
+   * Función que permite recibir los datos pasados, esta función es utilizada por otros componentes
+   * @param {string} id - ID de la línea de tiempo
+   * @returns {Observable<News[]>} - Observables es una interfaz que permite operaciones asíncronicas.
+   */
+  getData(id: string): Observable<News[]> {
+    const dataSource = this.initializationDataSource(id);
+    return dataSource.asObservable();
   }
   constructor() { }
 }

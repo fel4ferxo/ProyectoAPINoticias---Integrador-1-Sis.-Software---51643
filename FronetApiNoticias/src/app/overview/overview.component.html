@@ -1,0 +1,76 @@
+<div class="container-fluid">
+  <div class="row d-flex">
+      <div class="col-auto bg-dark text-white sidebar position-fixed">
+          <div class="d-flex flex-column flex-shrink-0 p-3 text-white" style="width: 280px;">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+              <img src="./assets/imagenes/Chasky_News__3_-removebg-preview.png" alt="Logo Chasky News" class="logo-chasky" width="50" height="50">
+              <span class="fs-4">  Chasky News</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" (click)="navegarAComponent('news')">
+                  <i class="fa-solid fa-newspaper me-3" width="16" heigh="16"></i>
+                  Noticias
+                </a>
+              </li>
+              <li>
+                <a class="nav-link text-white">
+                  <i class="fa-solid fa-gear me-3" width="16" heigh="16"></i>
+                  Configuración
+                </a>
+              </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+              <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>mdo</strong>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" (click)="onLogOut()">Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+      </div>
+      <div class="col contenido">
+          <div>
+            <h1>Tus líneas de tiempo</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLineas"><i class="fa-solid fa-plus"></i> Crear nueva línea de tiempo</button>
+          </div>
+          <div class="contenedor-cartas">
+            <p-card (click)="abrirLinea(timeline.id)" [header]="timeline.nombre" [subheader]="timeline.fecha_ultimaModificacion" [style]="{width: '240px'}" *ngFor="let timeline of timelines" class="carta">
+              <ng-template pTemplate="header">
+                  <img [src]="timeline.imagenPreview" alt="Línea de tiempo">
+              </ng-template>
+            </p-card>
+          </div>
+      </div>
+  </div>
+</div>
+<form novalidate [formGroup]="formLinea" (ngSubmit)="onSubmit()">
+  <div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLinea" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitulo">Ingrese los datos</h5>
+        </div>
+        
+          <div class="modal-body">
+            <div class="input-group">
+              <input required type="text" class="form-control form-control-lg" id="nombre" placeholder="Título de línea de tiempo" formControlName="nombre" [ngClass]="{'is-invalid': f['nombre'].touched && f['nombre'].invalid, 'is-valid': f['nombre'].touched && f['nombre'].valid}">
+              <div class="invalid-feedback" *ngIf="f['nombre'].touched && f['nombre'].errors">
+                <div *ngIf="f['nombre'].errors['required']">Ingrese un título</div>
+              </div>
+              <div *ngIf="f['nombre'].touched && f['nombre'].valid" class="valid-feedback"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="formLinea.invalid" data-bs-dismiss="modal">Guardar</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</form>

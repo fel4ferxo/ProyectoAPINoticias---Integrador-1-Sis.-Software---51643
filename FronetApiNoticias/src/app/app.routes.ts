@@ -5,6 +5,8 @@ import { NewsComponent } from './news/news.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { TimelineComponent } from './timeline/timeline.component';
+import { OverviewComponent } from './overview/overview.component';
+
 export const routes: Routes = [
     {
         path:'',
@@ -25,7 +27,7 @@ export const routes: Routes = [
         path: 'news',
         component: NewsComponent,
         canActivate: [AuthGuard],
-        title: 'feed',
+        title: 'Noticias',
         children:[
             {
                 path: 'user-dashboard',
@@ -34,10 +36,20 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'overview',
+        component: OverviewComponent,
+        canActivate:[AuthGuard],
+        title: 'Tus líneas'
+    },
+    {
         path: 'timeline',
+        redirectTo: 'overview',
+        pathMatch: 'full'
+    },
+    {
+        path: 'timeline/:id',
+        canActivate:[AuthGuard],
         component: TimelineComponent,
         title: 'Línea de tiempo'
     }
-
-
 ];
