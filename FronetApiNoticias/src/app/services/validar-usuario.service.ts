@@ -1,11 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+export interface Usuario {
+  name: string;
+  apellido_p: string;
+  apellido_m: string;
+  correo: string;
+  telefono: string;
+  metodo_pago: string;
+  nro_cuenta: string;
+  password: string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class ValidarUsuarioService {
   private apiUrl = 'http://localhost:8080/validarUsuario';
+  private apiUrlcreate = 'http://localhost:8080/Usuario'; // Cambia a la URL de tu backend
 
   constructor(private http: HttpClient) { }
   validarUsuario(correo: string, password: string): Observable<any> {
@@ -17,5 +28,10 @@ export class ValidarUsuarioService {
       })
     };
     return this.http.post<any>(this.apiUrl, body,httpOptions); // Realizar la solicitud POST
+  }
+
+  createUsuario(newUsuario: Usuario): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(this.apiUrlcreate, newUsuario, { headers });
   }
 }

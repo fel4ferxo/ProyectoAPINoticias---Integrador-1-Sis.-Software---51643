@@ -1,20 +1,20 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="row border rounded-5 p-3 bg-white shadow box-area">
         <div class="col-md-6 left-box">
-            <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" novalidate>
+            <form [formGroup]="registroForm" (ngSubmit)="crearUsuario()" novalidate>
                 <div class="row align-items-center">
                     <div class="header-text mb-4">
                         <h2 class="text-lg-center">Regístrese</h2>
                     </div>
                     <div class="input-group mb-3">
-                        <input required type="text" class="form-control form-control-lg" id="nombre" placeholder="Nombre de usuario" formControlName="nombre" [ngClass]="{'is-invalid': f['nombre'].touched && f['nombre'].invalid, 'is-valid': f['nombre'].touched && f['nombre'].valid}">
+                        <input [(ngModel)]="usuario.name" required type="text" class="form-control form-control-lg" id="nombre" placeholder="Nombre de usuario" formControlName="nombre" [ngClass]="{'is-invalid': f['nombre'].touched && f['nombre'].invalid, 'is-valid': f['nombre'].touched && f['nombre'].valid}">
                         <div class="invalid-feedback" *ngIf="f['nombre'].touched && f['nombre'].errors">
                             <div *ngIf="f['nombre'].errors['required']">Ingrese un nombre de usuario</div>
                         </div>
                         <div *ngIf="f['nombre'].touched && f['nombre'].valid" class="valid-feedback"></div>
                     </div>
                     <div class="input-group mb-3">
-                        <input id="correo" type="email" class="form-control form-control-lg bg-light fs-8" placeholder="Correo electrónico" formControlName="correo" [ngClass]="{'is-invalid': f['correo'].touched && f['correo'].invalid, 'is-valid': f['correo'].touched && f['correo'].valid}" required>
+                        <input  [(ngModel)]="usuario.correo" id="correo" type="email" class="form-control form-control-lg bg-light fs-8" placeholder="Correo electrónico" formControlName="correo" [ngClass]="{'is-invalid': f['correo'].touched && f['correo'].invalid, 'is-valid': f['correo'].touched && f['correo'].valid}" required>
                         <div class="invalid-feedback" *ngIf="f['correo'].touched && f['correo'].errors">
                             <div *ngIf="f['correo'].errors['required']">Ingrese un correo válido</div>
                             <div *ngIf="f['correo'].errors['invalidEmail']">Correo registrado</div>
@@ -22,7 +22,7 @@
                         <div *ngIf="f['correo'].touched && f['correo'].valid" class="valid-feedback"></div>
                     </div>
                     <div class="input-group mb-3">
-                        <input id="password" type="password" class="form-control form-control-lg bg-light fs-8" placeholder="Contraseña" formControlName="password" [ngClass]="{'is-invalid': f['password'].touched && f['password'].invalid, 'is-valid': f['password'].touched && f['password'].valid}" required>
+                        <input [(ngModel)]="usuario.password" id="password" type="password" class="form-control form-control-lg bg-light fs-8" placeholder="Contraseña" formControlName="password" [ngClass]="{'is-invalid': f['password'].touched && f['password'].invalid, 'is-valid': f['password'].touched && f['password'].valid}" required>
                         <div class="invalid-feedback" *ngIf="f['password'].touched && f['password'].errors">
                             <div *ngIf="f['password'].errors['required']">Ingrese una contraseña válida</div>
                         </div>
@@ -34,7 +34,7 @@
                         <div *ngIf="f['confirmacionPassword'].touched && f['confirmacionPassword'].valid && !registroForm.errors?.['mismatch']" class="valid-feedback"></div>
                     </div>
                     <div class="input-group mb-3">
-                        <select class="form-select form-select-lg bg-light fs-8" name="opcionesPago" id="opcionesPago" formControlName="opcionesPago" [ngClass]="{'is-invalid': f['opcionesPago'].touched && f['opcionesPago'].invalid, 'is-valid': f['opcionesPago'].touched && f['opcionesPago'].valid}" required>
+                        <select [(ngModel)]="usuario.metodo_pago" class="form-select form-select-lg bg-light fs-8" name="opcionesPago" id="opcionesPago" formControlName="opcionesPago" [ngClass]="{'is-invalid': f['opcionesPago'].touched && f['opcionesPago'].invalid, 'is-valid': f['opcionesPago'].touched && f['opcionesPago'].valid}" required>
                             <option value="" disabled selected>Escoja un método de pago</option>
                             <option value="yape">Yape</option>
                             <option value="tarjeta">Tarjeta de crédito</option>
@@ -44,7 +44,7 @@
                         <div *ngIf="f['opcionesPago'].touched && f['opcionesPago'].valid" class="valid-feedback"></div>
                     </div>
                     <div class="input-group mb-3">
-                        <input class="form-control form-control-lg bg-light fs-8" type="number" id="numeroCuenta" placeholder="Ingrese un número de cuenta" formControlName="numeroCuenta" [ngClass]="{'is-invalid': f['numeroCuenta'].touched && f['numeroCuenta'].invalid, 'is-valid': f['numeroCuenta'].touched && f['numeroCuenta'].valid}" required>
+                        <input [(ngModel)]="usuario.nro_cuenta" class="form-control form-control-lg bg-light fs-8" type="number" id="numeroCuenta" placeholder="Ingrese un número de cuenta" formControlName="numeroCuenta" [ngClass]="{'is-invalid': f['numeroCuenta'].touched && f['numeroCuenta'].invalid, 'is-valid': f['numeroCuenta'].touched && f['numeroCuenta'].valid}" required>
                         <div class="invalid-feedback" *ngIf="f['numeroCuenta'].touched && f['numeroCuenta'].errors">
                             <div *ngIf="f['numeroCuenta'].errors['required']">Ingrese un número de cuenta</div>
                             <div *ngIf="f['numeroCuenta'].errors['minLength'] || f['numeroCuenta'].errors['maxLength']">El número de cuenta debe ser de 20 dígitos</div>
@@ -73,5 +73,5 @@
             </div>
             <p class="text-white fs-2">CHASKY NEWS</p>
         </div>
-    </div>        
+    </div>
 </div>

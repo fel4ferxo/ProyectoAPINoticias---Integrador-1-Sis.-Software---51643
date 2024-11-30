@@ -39,6 +39,7 @@ export class InicioSesionComponent {
         next: (usuario) => {
           if (usuario) {
             // Usuario válido
+            console.log(usuario);
             this.authService.setLoggedIn(true); // Marcar como autenticado
             this.router.navigate(['/news']); // Redirigir
           } else {

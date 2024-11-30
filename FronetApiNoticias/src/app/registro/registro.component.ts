@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Usuario } from '../services/validar-usuario.service';
+import { ValidarUsuarioService } from '../services/validar-usuario.service';
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -13,17 +15,27 @@ export class RegistroComponent {
 
   /**
    * Es el controlador del formulario, nos permite acceder a todos sus campos
-   * @type {FormGroup}*/ 
+   * @type {FormGroup}*/
 
   registroForm: FormGroup;
-  
+
   /**constructor: Inicializa los valores por defecto del cuestionario y los validadores
    * Validatores required checa que los campos no estén vacios
    * @param {FormBuilder} fb - Inicializa FormBuilder (y AbstractControl), este nos permite monitorear los valores y la validez del formulario dependiendo de validaciones personalizadas
    * @param {Router} router - Inicializa Router, un servicio predeterminado de Angular que nos permite desplazarnos entre componentes
   */
-    
-  constructor(private fb: FormBuilder, private router: Router) {
+  usuario: Usuario = {
+    name: '',
+    apellido_p: '',
+    apellido_m: '',
+    correo: '',
+    telefono: '',
+    metodo_pago: '',
+    nro_cuenta: '',
+    password: ''
+  };
+  mensaje: string='';
+  constructor(private ValidarUsuarioService:ValidarUsuarioService,private fb: FormBuilder, private router: Router) {
     this.registroForm = this.fb.group({
       nombre: ['', Validators.required],
       correo: ['', Validators.required],
@@ -59,7 +71,21 @@ export class RegistroComponent {
     const confirmacionPassword = group.get('confirmacionPassword')?.value;
     return password === confirmacionPassword ? null : { mismatch: true };
   }
-  
+  crearUsuario() {
+    this.ValidarUsuarioService.createUsuario(this.usuario).subscribe({
+      next: (response) => {
+        this.mensaje = `Usuario creado con ID: ${response}`;
+        this.router.navigate(['/inicio-sesion']);
+      },
+      error: (error) => {
+        if (error.status === 400) {
+          this.mensaje = `Error: ${error.error.error}`;
+        } else {
+          this.mensaje = 'Error interno del servidor.';
+        }
+      }
+    });
+  }
   get f() { return this.registroForm.controls; }
 
   /**
