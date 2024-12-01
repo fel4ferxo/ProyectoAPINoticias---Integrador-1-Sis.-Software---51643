@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+export interface Usuario {
+  name: string;
+  apellido_p: string;
+  apellido_m: string;
+  correo: string;
+  telefono: string;
+  metodo_pago: string;
+  nro_cuenta: string;
+  password: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -17,5 +28,10 @@ export class ValidarUsuarioService {
       })
     };
     return this.http.post<any>(this.apiUrl, body,httpOptions); // Realizar la solicitud POST
+  }
+
+  createUsuario(newUsuario: Usuario): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(this.apiUrl, newUsuario, { headers });
   }
 }

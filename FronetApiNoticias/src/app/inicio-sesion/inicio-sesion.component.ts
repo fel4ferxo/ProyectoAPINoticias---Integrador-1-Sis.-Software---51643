@@ -65,6 +65,7 @@ export class InicioSesionComponent {
           } else {
             // Usuario no encontrado
             this.loginError = 'Correo o contraseña incorrectos';
+
           }
         },
         error: (err) => {
