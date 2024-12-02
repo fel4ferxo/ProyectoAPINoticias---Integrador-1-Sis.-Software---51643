@@ -24,12 +24,13 @@
             <hr>
             <div class="dropdown">
               <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <img src="./assets/imagenes/user.png.jpg" alt="Foto de perfil" width="32" height="32" class="rounded-circle me-2">
                 <strong>mdo</strong>
               </a>
               <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" (click)="onLogOut()">Sign out</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-datos">Ver perfil</a></li>
+                <li><a class="dropdown-item" (click)="onLogOut()">Cerrar sesión</a></li>
               </ul>
             </div>
           </div>
@@ -49,6 +50,8 @@
       </div>
   </div>
 </div>
+
+<!--Modal para el registro de una nueva línea de tiempo-->
 <form novalidate [formGroup]="formLinea" (ngSubmit)="onSubmit()">
   <div class="modal fade" id="modalLineas" tabindex="-1" role="dialog" aria-labelledby="modalLinea" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -74,3 +77,45 @@
     </div>
   </div>
 </form>
+
+<!--Modal que muestra los datos del usuario-->
+<div id="modal-datos" class="modal-fade" tabindex="-1" aria-labelledby="modalDatosUsuario" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDatosLabel">Tus datos</h5>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group item">
+            <div class="contenedor-datos">
+              <div class="d-flex justify-content-between">
+                <div>ID de usuario: </div>
+                <div>{{usuario?.id}}</div>
+              </div>
+            </div>
+          </li>
+          <li class="list-group item">
+            <div class="contenedor-datos">
+              <div class="justify-content-between">
+                <div>Correo registrado: </div>
+                <div>{{usuario?.correo}}</div>
+              </div>
+            </div>
+          </li>
+          <li class="list-group item">
+            <div class="contenedor-datos">
+              <div class="justify-content-between">
+                <div>Método de pago: </div>
+                <div>{{usuario?.metodoPago}}</div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
