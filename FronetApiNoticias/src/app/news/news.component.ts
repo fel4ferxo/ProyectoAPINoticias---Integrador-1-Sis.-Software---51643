@@ -14,6 +14,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Timeline } from '../overview/overview.component';
+import { Usuario } from '../inicio-sesion/inicio-sesion.component';
 //Interfaz de la noticia
 export interface News{
   id: number;
@@ -37,6 +38,8 @@ export interface News{
 })
 
 export class NewsComponent implements OnInit{
+  usuario: Usuario | null = null;
+
   titularBuscar: string = '';
   categoriaBuscar: string = '';
   paisBuscar: string='';
@@ -90,6 +93,13 @@ export class NewsComponent implements OnInit{
       }
     });
   }
+
+  getUsuario():void{
+    this.dataService.dataUsuario$.subscribe( (dataUsuario) => {
+      this.usuario = dataUsuario;
+    })
+  }
+
 
   /**
    * Función que saca todas las líneas de tiempo del usuario
@@ -259,6 +269,7 @@ export class NewsComponent implements OnInit{
    */
 
   ngOnInit(): void {
+    this.getUsuario();
     this.getNoticias();
     this.items = [
       {label: 'Agregar a línea de tiempo', icon: 'pi pi-sitemap', command: () => this.seleccionarNoticias(this.selectedNews)}
