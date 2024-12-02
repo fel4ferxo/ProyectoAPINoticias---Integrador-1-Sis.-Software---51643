@@ -1,7 +1,7 @@
 <div class="card">
     @let titulo = '';
     <h1>{{titulo}}</h1>
-    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+    <p-timeline [value]="events" align="alternate" styleClass="customized-timeline" id="id-timeline">
         <ng-template pTemplate="marker" let-event>
             <span 
                 class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1" 
