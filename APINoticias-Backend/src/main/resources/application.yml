@@ -12,3 +12,5 @@ datasource:
         maximum-pool-size: 20
         pool-name: "crud-api"
         auto-commit: true
+server:
+    port: 8080

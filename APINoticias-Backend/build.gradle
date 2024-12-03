@@ -18,9 +18,10 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Para pruebas
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	// JUnit 5 para pruebas unitarias
@@ -32,7 +33,10 @@ dependencies {
 	// Mockito JUnit para integración con JUnit 5
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
 	implementation 'org.springframework.session:spring-session-core'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security' // Para la seguridad en Spring Boot
+	//
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Si usas JPA
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // Si usas Thymeleaf, por ejemplo
 }
 
 tasks.named('test') {

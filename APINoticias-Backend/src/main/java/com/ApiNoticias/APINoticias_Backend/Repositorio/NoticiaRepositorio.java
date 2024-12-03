@@ -1,6 +1,8 @@
 package com.ApiNoticias.APINoticias_Backend.Repositorio;
 
 import com.ApiNoticias.APINoticias_Backend.Modelo.Noticia;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,6 +20,8 @@ import java.util.List;
 @Repository
 public class NoticiaRepositorio {
 
+    private static final Logger logger = LoggerFactory.getLogger(NoticiaRepositorio.class);
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert insertNoticia;
     private final NoticiaMap noticiaMap = new NoticiaMap();
@@ -32,6 +36,8 @@ public class NoticiaRepositorio {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.insertNoticia = new SimpleJdbcInsert(dataSource).withTableName("noticia")
                 .usingGeneratedKeyColumns("id");
+
+        logger.info("Repositorio Noticia inicializado.");
     }
 
     /**
@@ -41,7 +47,12 @@ public class NoticiaRepositorio {
      */
     public List<Noticia> getAllNoticias() {
         String sql = "SELECT * FROM noticia;";
-        return namedParameterJdbcTemplate.query(sql, noticiaMap);
+        logger.debug("Ejecutando consulta para obtener todas las noticias: {}", sql);
+
+        List<Noticia> resultado = namedParameterJdbcTemplate.query(sql, noticiaMap);
+        logger.info("Se obtuvieron {} noticias.", resultado.size());
+
+        return resultado;
     }
 
     /**
@@ -56,9 +67,12 @@ public class NoticiaRepositorio {
         MapSqlParameterSource parametrosVerificacion = new MapSqlParameterSource();
         parametrosVerificacion.addValue("titular", nuevaNoticia.getTitular());
 
+        logger.debug("Verificando si existe una noticia con el título: {}", nuevaNoticia.getTitular());
+
         int existeTitulo = namedParameterJdbcTemplate.queryForObject(sqlVerificarTitulo, parametrosVerificacion, Integer.class);
 
         if (existeTitulo > 0) {
+            logger.warn("El título '{}' ya está registrado para otra noticia.", nuevaNoticia.getTitular());
             throw new IllegalArgumentException("El título ya está registrado para otra noticia.");
         }
 
@@ -74,7 +88,12 @@ public class NoticiaRepositorio {
         parametrosNoticia.addValue("contenido", nuevaNoticia.getContenido());
         parametrosNoticia.addValue("url_noticia", nuevaNoticia.getUrlNoticia());
 
-        return insertNoticia.executeAndReturnKey(parametrosNoticia).longValue();
+        logger.debug("Insertando nueva noticia: {}", nuevaNoticia);
+
+        long idGenerado = insertNoticia.executeAndReturnKey(parametrosNoticia).longValue();
+        logger.info("Noticia creada con éxito, ID generado: {}", idGenerado);
+
+        return idGenerado;
     }
 
     /**
@@ -100,7 +119,10 @@ public class NoticiaRepositorio {
         parametrosNoticia.addValue("contenido", noticiaModificada.getContenido());
         parametrosNoticia.addValue("urlNoticia", noticiaModificada.getUrlNoticia());
 
-        namedParameterJdbcTemplate.update(sql, parametrosNoticia);
+        logger.debug("Actualizando noticia con ID {}: {}", noticiaModificada.getId(), noticiaModificada);
+
+        int filasAfectadas = namedParameterJdbcTemplate.update(sql, parametrosNoticia);
+        logger.info("Se actualizaron {} filas para la noticia con ID {}", filasAfectadas, noticiaModificada.getId());
     }
 
     /**
@@ -109,7 +131,7 @@ public class NoticiaRepositorio {
     public static class NoticiaMap implements RowMapper<Noticia> {
         @Override
         public Noticia mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Noticia(
+            Noticia noticia = new Noticia(
                     rs.getInt("id"),
                     rs.getString("categoria"),
                     rs.getString("portal"),
@@ -121,6 +143,9 @@ public class NoticiaRepositorio {
                     rs.getString("contenido"),
                     rs.getString("urlNoticia")
             );
+
+            logger.debug("Mapeando fila de resultado a Noticia: {}", noticia);
+            return noticia;
         }
     }
 }
