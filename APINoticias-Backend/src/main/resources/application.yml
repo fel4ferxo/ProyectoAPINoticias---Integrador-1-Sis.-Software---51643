@@ -6,11 +6,11 @@ spring:
         name: crup_bd_api_noticia
 datasource:
     my-connection:
-        jdbc-url: jdbc:mysql://localhost:3306/bd_api_noticias
-        username: root
-        password: ?!hg8>Dh,y)4
+        jdbc-url: jdbc:mysql://bfqbqkxgaslrjtwpr6wn-mysql.services.clever-cloud.com/bfqbqkxgaslrjtwpr6wn
+        username: um7owh6xrefyzh8q
+        password: 949KhdTBJHfFtEVrUND4
         maximum-pool-size: 20
         pool-name: "crud-api"
         auto-commit: true
 server:
-    port: 8080
+    port: ${PORT:8080}
