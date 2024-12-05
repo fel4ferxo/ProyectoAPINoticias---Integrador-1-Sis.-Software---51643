@@ -16,7 +16,7 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class ValidarUsuarioService {
-  private apiUrl = 'http://localhost:8080/validarUsuario';
+  private apiUrl = 'https://responsible-perfection-apinoticia1.up.railway.app/validarUsuario';
 
   constructor(private http: HttpClient) { }
   validarUsuario(correo: string, password: string): Observable<any> {
