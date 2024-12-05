@@ -8,6 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Timeline} from '../overview/overview.component';
 import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import html2canvas from 'html2canvas';
+
 
 interface EventItem{
   id?: number,
@@ -123,6 +126,61 @@ export class TimelineComponent implements OnInit{
   }
 
   /**
+   * Función que formar dinámicamente el nombre del preview
+   * @param {string} id_timeline - ID de la línea de tiempo a la que asignar esta preview
+   * @returns {string} - Nombre de la imagen
+   */
+
+  formarNombre(id_timeline : string): string{
+    const nombre_preview: string = `preview_timeline_${id_timeline}`;
+    return nombre_preview;
+  }
+
+
+  /**
+   * Función que convierte la imagen en un blob para que sea pasado al back end
+   * @param {string} dataURL - metadata de la iamgen
+   * @returns {Blob} - Blob
+   */
+  dataURLToBlob(dataURL: string): Blob {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+
+    for(let i = 0; i < byteString.length; i++){
+      intArray[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([arrayBuffer], {type: mimeString});
+  }
+
+  /**
+   * Función que crea el preview de la línea de tiempo y la registra dentro de la base de datos
+   * @param {string} id_timeline - ID de la línea de tiempo, es usado para formar el nombre del archivo.
+   */
+
+  guardarPreview(id_timeline: string){
+    const elementos = document.getElementById('id-timeline');
+    if(elementos){
+      html2canvas(elementos).then(canvas =>
+      {
+        const dataImagen = canvas.toDataURL('image/png');
+        const blob = this.dataURLToBlob(dataImagen);
+        const formatData = new FormData();
+        const nombreArchivo: string = this.formarNombre(id_timeline);
+        formatData.append('file', blob, nombreArchivo);
+        this.http.post('htpp://localhost:8080/upload', FormData).subscribe({
+          next: response => console.log('Imagen subida correctamente', response),
+          error: error => console.error('Error al subir la imagen', error)
+        })
+      }
+      )
+      
+    }
+  }
+
+  /**
    * Funcion que guarda los eventos recibidos desde el feed de noticias
    * @param {EventItem} eventosExistentes - Eventos ya registrados
    * @param {EventItem} eventosARegistrar - EVentos recibidos por el servicio por registrar
@@ -225,6 +283,6 @@ export class TimelineComponent implements OnInit{
   * @param {ActivatedRoute} route - Servicio de Angular que permite el mostrar distintas noticas de tiempo dependiendo de la URL (que dependen del ID)
   */
   }
-  constructor(private dataService: DataService, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private route: ActivatedRoute, private http: HttpClient) {
   }
 }

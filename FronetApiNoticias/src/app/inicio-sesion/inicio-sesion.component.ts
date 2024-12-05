@@ -6,7 +6,13 @@ import {RouterModule} from'@angular/router';
 import { AuthService } from '../services/auth.service';
 import { ValidarUsuarioService } from '../services/validar-usuario.service';
 import { DataService } from '../services/data.service';
-
+export interface Usuario{
+  id: string,
+  nombre: string,
+  correo: string,
+  telefono: string,
+  metodoPago: string
+}
 
 @Component({
   selector: 'app-inicio-sesion',
@@ -16,7 +22,7 @@ import { DataService } from '../services/data.service';
   styleUrl: './inicio-sesion.component.css'
 })
 export class InicioSesionComponent {
-  usuarioAGuardar: any;
+  usuarioAGuardar: Usuario | null = null;
 
   formLogin: FormGroup;
   loginError: string | null = null; // Para mostrar errores al usuario
@@ -35,14 +41,14 @@ export class InicioSesionComponent {
 
   /**
    * Función que manda el ID a otros componentes para hacer CRUDs a la base de datos
-   * @param {string} id  - ID del usuario
+   * @param {Usuario} usuario  - ID del usuario
    */
 
-  sendId(id: string){
-    this.dataService.setId(id);
+  sendDataUsuario(usuario: Usuario){
+    this.dataService.setDataUsuario(usuario);
   }
 
-  guardarUsuarioLocalStorage(usuario: any){
+  guardarUsuarioLocalStorage(usuario: Usuario){
     if(typeof localStorage !== 'undefined'){
         localStorage.setItem('email', JSON.stringify(usuario));
     }
@@ -57,10 +63,16 @@ export class InicioSesionComponent {
       this.ValidarUsuarioService.validarUsuario(correo, password).subscribe({
         next: (usuario) => {
           if (usuario) {
-            this.usuarioAGuardar = usuario;
+            this.usuarioAGuardar = {
+              id: usuario.idusuario,
+              nombre: usuario.name,
+              correo: usuario.correo,
+              telefono: usuario.telefono,
+              metodoPago: usuario.metodo_pago
+            }
             this.guardarUsuarioLocalStorage(this.usuarioAGuardar);
-            this.sendId(usuario.id);
-            this.authService.setLoggedIn(true); // Marcar como autenticado
+            this.sendDataUsuario(this.usuarioAGuardar);
+            this.authService.setLoggedIn(); // Marcar como autenticado
             this.router.navigate(['/news']); // Redirigir
           } else {
             // Usuario no encontrado

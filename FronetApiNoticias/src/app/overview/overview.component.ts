@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Usuario } from '../inicio-sesion/inicio-sesion.component';
+import { DataService } from '../services/data.service';
 //Interfaz de la línea de tiempo
 export interface Timeline{
   id: number,
@@ -22,6 +24,7 @@ export interface Timeline{
 })
 
 export class OverviewComponent implements OnInit{
+  usuario: Usuario | null = null; 
   //Lineas de tiempo del usuario
   timelines: Timeline[] = [];
   visible: boolean= false;
@@ -79,8 +82,10 @@ export class OverviewComponent implements OnInit{
    * constructor: Inicializa recursos necesarios para el funcionamiento del resto de funciones y los validadores.
    * @param {FormBuilder} fb - Inicializa FormBuilder, este nos permite monitorear los valores y la validez del formulario, en este caso del formulario de registro de una nueva timeline
    * @param {Router} router - Inicializa Router, un servicio predeterminado de Angular que nos permite desplazarnos entre componentes
+   * @param {AuthService} authService - Inicializa authservice, un servicio que nos permite manejar si el usuario está logeado o no
+   * @param {DataService} dataService - Inicializa dataService, un servicio que nos permite recibir datos desde otro componente
    */
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService){
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private dataService: DataService){
     this.formLinea = this.fb.group({
       nombre: ['', Validators.required] //Establece el valor por defecto e iniciliza el validador (en este caso se asegura de que el campo no este vacio)
     });
@@ -88,6 +93,9 @@ export class OverviewComponent implements OnInit{
 
   get f() { return this.formLinea.controls; }
 
+  /**
+   * Función que invoca el servicio authservice para cerrar la sesión del usuario
+   */
   onLogOut(){
     this.authService.logOut();
   }
@@ -122,6 +130,12 @@ export class OverviewComponent implements OnInit{
 
   navegarAComponent(rutaComponente: string): void{
     this.router.navigate([`/${rutaComponente}`]);
+  }
+
+  getUsuario():void{
+    this.dataService.dataUsuario$.subscribe( (dataUsuario) => {
+      this.usuario = dataUsuario;
+    })
   }
 
   /**
@@ -166,6 +180,7 @@ export class OverviewComponent implements OnInit{
     } else {
       console.warn('localStorage is not available');
     }
+    this.getUsuario();
     this.getTimelines();
     console.log(this.timelines);
   }
