@@ -1,0 +1,83 @@
+2024-12-04 14:26:40 INFO  c.A.A.ApiNoticiasBackendApplication - Starting ApiNoticiasBackendApplication using Java 21.0.5 with PID 5740 (/home/alfredo/Documentos/proyectos/proyectosGit/ProyectoAPINoticias---Integrador-1-Sis.-Software---51643/APINoticias-Backend/build/classes/java/main started by alfredo in /home/alfredo/Documentos/proyectos/proyectosGit/ProyectoAPINoticias---Integrador-1-Sis.-Software---51643)
+2024-12-04 14:26:40 DEBUG c.A.A.ApiNoticiasBackendApplication - Running with Spring Boot v3.3.4, Spring v6.1.13
+2024-12-04 14:26:40 INFO  c.A.A.ApiNoticiasBackendApplication - No active profile set, falling back to 1 default profile: "default"
+2024-12-04 14:26:42 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-04 14:26:42 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 35 ms. Found 0 JPA repository interfaces.
+2024-12-04 14:26:43 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-04 14:26:43 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-04 14:26:43 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-04 14:26:43 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-04 14:26:43 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-04 14:26:43 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3358 ms
+2024-12-04 14:26:44 INFO  com.zaxxer.hikari.HikariDataSource - crud-api - Starting...
+2024-12-04 14:26:47 INFO  com.zaxxer.hikari.pool.HikariPool - crud-api - Added connection com.mysql.cj.jdbc.ConnectionImpl@47058864
+2024-12-04 14:26:47 INFO  com.zaxxer.hikari.HikariDataSource - crud-api - Start completed.
+2024-12-04 14:26:47 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-04 14:26:47 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-04 14:26:47 INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-04 14:26:48 INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-04 14:26:49 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-04 14:26:49 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 14:26:49 INFO  c.A.A.R.LineaTiempoRepositorio - Repositorio LineaTiempo inicializado.
+2024-12-04 14:26:49 INFO  c.A.A.R.LineaTiempoNoticiaRepositorio - Repositorio LineaTiempoNoticia inicializado.
+2024-12-04 14:26:49 INFO  c.A.A.Repositorio.NoticiaRepositorio - Repositorio Noticia inicializado.
+2024-12-04 14:26:49 INFO  c.A.A.Repositorio.UsuarioRepositorio - Repositorio Usuario inicializado.
+2024-12-04 14:26:49 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-12-04 14:26:49 WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 8b3f55d4-0247-4d90-8382-3164cd446569
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-04 14:26:49 INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-04 14:26:50 WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2024-12-04 14:26:51 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-04 14:26:51 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-04 14:26:51 INFO  c.A.A.ApiNoticiasBackendApplication - Started ApiNoticiasBackendApplication in 12.159 seconds (process running for 12.944)
+2024-12-04 14:26:51 DEBUG c.A.A.ApiNoticiasBackendApplication - error prueba
+2024-12-04 14:30:35 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-04 14:30:35 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-12-04 14:30:35 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2024-12-04 14:30:35 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Verificando si el correo eeeqeee@gmail.com ya está registrado.
+2024-12-04 14:30:35 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Insertando nuevo usuario: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@79b220ef
+2024-12-04 14:30:36 INFO  c.A.A.Repositorio.UsuarioRepositorio - Usuario creado con éxito, ID generado: 28
+2024-12-04 14:30:40 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Verificando si el correo eeeqeee@gmail.com ya está registrado.
+2024-12-04 14:30:41 WARN  c.A.A.Repositorio.UsuarioRepositorio - El correo eeeqeee@gmail.com ya está registrado.
+2024-12-04 14:31:32 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Validando usuario con correo: luca.com
+2024-12-04 14:31:33 WARN  c.A.A.Repositorio.UsuarioRepositorio - No se encontraron usuarios con las credenciales proporcionadas.
+2024-12-04 14:31:57 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Ejecutando consulta para obtener todos los usuarios: select * from usuario;
+2024-12-04 14:31:57 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@3b90299b
+2024-12-04 14:31:57 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@1942f58f
+2024-12-04 14:31:57 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@a617524
+2024-12-04 14:31:57 INFO  c.A.A.Repositorio.UsuarioRepositorio - Se obtuvieron 3 usuarios.
+2024-12-04 14:36:39 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Validando usuario con correo: eeeqeee@gmail.com
+2024-12-04 14:36:40 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario para validación: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@2dc8937f
+2024-12-04 14:36:40 INFO  c.A.A.Repositorio.UsuarioRepositorio - Usuario autenticado con éxito: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@2dc8937f
+2024-12-04 14:49:16 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Validando usuario con correo: eeeqeee@gmail.com
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@47058864 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@35e1e431 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@415375bd (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@52a60f63 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7dcb9d6e (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@47b13e8a (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1d95455c (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7faa8c9a (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@5eab5eec (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@10a06edd (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@27a86630 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@ccdf003 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@8158348 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1b50d211 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@7fadbead (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@1c0304b3 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@38a8cbb8 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 WARN  com.zaxxer.hikari.pool.PoolBase - crud-api - Failed to validate connection com.mysql.cj.jdbc.ConnectionImpl@257546e6 (No operations allowed after connection closed.). Possibly consider using a shorter maxLifetime value.
+2024-12-04 14:49:16 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario para validación: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@37bfdc33
+2024-12-04 14:49:17 INFO  c.A.A.Repositorio.UsuarioRepositorio - Usuario autenticado con éxito: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@37bfdc33
+2024-12-04 14:49:40 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Validando usuario con correo: eeeqeee@gmail.com
+2024-12-04 14:49:40 DEBUG c.A.A.Repositorio.UsuarioRepositorio - Mapeando fila de resultado a Usuario para validación: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@5632c46c
+2024-12-04 14:49:40 INFO  c.A.A.Repositorio.UsuarioRepositorio - Usuario autenticado con éxito: com.ApiNoticias.APINoticias_Backend.Modelo.Usuario@5632c46c
+2024-12-04 22:24:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 22:24:40 INFO  com.zaxxer.hikari.HikariDataSource - crud-api - Shutdown initiated...
+2024-12-04 22:24:50 WARN  com.zaxxer.hikari.pool.HikariPool - Timed-out waiting for close connection executor to shutdown
+2024-12-04 22:24:50 INFO  com.zaxxer.hikari.HikariDataSource - crud-api - Shutdown completed.

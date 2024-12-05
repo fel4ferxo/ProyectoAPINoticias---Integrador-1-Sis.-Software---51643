@@ -1,6 +1,8 @@
 package com.ApiNoticias.APINoticias_Backend.Repositorio;
 
 import com.ApiNoticias.APINoticias_Backend.Modelo.Usuario;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,16 +13,20 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 /**
  * Repositorio para gestionar las operaciones relacionadas con los usuarios en la base de datos.
  * Proporciona métodos para realizar CRUD y autenticación.
  */
 @Repository
 public class UsuarioRepositorio {
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioRepositorio.class);
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert insertusuario;
-    private final usuarioMap suario_Map=new usuarioMap();
-    private final usuarioMapValidar usuarioValidar_Map=new usuarioMapValidar();
+    private final usuarioMap suario_Map = new usuarioMap();
+    private final usuarioMapValidar usuarioValidar_Map = new usuarioMapValidar();
+
     /**
      * Constructor que inicializa las herramientas de acceso a la base de datos.
      *
@@ -32,16 +38,25 @@ public class UsuarioRepositorio {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.insertusuario = new SimpleJdbcInsert(dataSource).withTableName("usuario")
                 .usingGeneratedKeyColumns("idusuario");
+
+        logger.info("Repositorio Usuario inicializado.");
     }
+
     /**
      * Obtiene todos los usuarios de la tabla "usuario".
      *
      * @return una lista de usuarios existentes en la base de datos.
      */
-    public List<Usuario> getAllUsuarios(){
-        String sql="select * from usuario;";
-        return namedParameterJdbcTemplate.query(sql,suario_Map);
+    public List<Usuario> getAllUsuarios() {
+        String sql = "select * from usuario;";
+        logger.debug("Ejecutando consulta para obtener todos los usuarios: {}", sql);
+
+        List<Usuario> resultado = namedParameterJdbcTemplate.query(sql, suario_Map);
+        logger.info("Se obtuvieron {} usuarios.", resultado.size());
+
+        return resultado;
     }
+
     /**
      * Inserta un nuevo usuario en la base de datos.
      *
@@ -54,9 +69,12 @@ public class UsuarioRepositorio {
         MapSqlParameterSource parametrosVerificacion = new MapSqlParameterSource();
         parametrosVerificacion.addValue("correo", newUsuario.getCorreo());
 
+        logger.debug("Verificando si el correo {} ya está registrado.", newUsuario.getCorreo());
+
         int existeCorreo = namedParameterJdbcTemplate.queryForObject(sqlVerificarCorreo, parametrosVerificacion, Integer.class);
 
         if (existeCorreo > 0) {
+            logger.warn("El correo {} ya está registrado.", newUsuario.getCorreo());
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
@@ -71,7 +89,12 @@ public class UsuarioRepositorio {
         parametrosUsuario.addValue("nro_cuenta", newUsuario.getNuemro_ccuenta());
         parametrosUsuario.addValue("password", newUsuario.getPassword());
 
-        return insertusuario.executeAndReturnKey(parametrosUsuario).longValue();
+        logger.debug("Insertando nuevo usuario: {}", newUsuario);
+
+        long idGenerado = insertusuario.executeAndReturnKey(parametrosUsuario).longValue();
+        logger.info("Usuario creado con éxito, ID generado: {}", idGenerado);
+
+        return idGenerado;
     }
 
     /**
@@ -95,8 +118,12 @@ public class UsuarioRepositorio {
         parametrosUsuario.addValue("nro_cuenta", usuarioModificado.getNuemro_ccuenta());
         parametrosUsuario.addValue("password", usuarioModificado.getPassword());
 
-        namedParameterJdbcTemplate.update(sql, parametrosUsuario);
+        logger.debug("Actualizando usuario con ID {}: {}", usuarioModificado.getId(), usuarioModificado);
+
+        int filasAfectadas = namedParameterJdbcTemplate.update(sql, parametrosUsuario);
+        logger.info("Se actualizaron {} filas para el usuario con ID {}", filasAfectadas, usuarioModificado.getId());
     }
+
     /**
      * Valida las credenciales de un usuario (correo y contraseña).
      *
@@ -110,59 +137,60 @@ public class UsuarioRepositorio {
         parametros.addValue("correo", correo);
         parametros.addValue("password", password);
 
+        logger.debug("Validando usuario con correo: {}", correo);
+
         List<Usuario> usuarios = namedParameterJdbcTemplate.query(sql, parametros, usuarioValidar_Map);
-        return usuarios.isEmpty() ? null : usuarios.get(0); // Retorna el primer usuario si existe
+        if (usuarios.isEmpty()) {
+            logger.warn("No se encontraron usuarios con las credenciales proporcionadas.");
+            return null; // No se encontraron usuarios con esas credenciales
+        }
+
+        logger.info("Usuario autenticado con éxito: {}", usuarios.get(0));
+        return usuarios.get(0); // Retorna el primer usuario si existe
     }
+
     /**
      * Mapeador para convertir resultados de consultas SQL en objetos Usuario.
      */
     public static class usuarioMap implements RowMapper<Usuario> {
-        /**
-         * Convierte una fila del ResultSet en un objeto Usuario.
-         *
-         * @param rs     el ResultSet que contiene los datos de la consulta.
-         * @param rowNum el número de la fila actual.
-         * @return un objeto Usuario con los datos de la fila.
-         * @throws SQLException si ocurre un error al leer los datos del ResultSet.
-         */
         @Override
         public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
-            long id=rs.getLong("idusuario");
-            String name=rs.getString("name");
-            String apellidop=rs.getString("apellido_p");
-            String apellido_m=rs.getString("apellido_m");
-            String correo=rs.getString("correo");
-            String telefono=rs.getString("telefono");
-            String metodo_pago=rs.getString("metodo_pago");
-            String numero_cuenta=rs.getString("nro_cuenta");
-            String password=rs.getString("password");
-            return new Usuario(id,name,apellidop,apellido_m,correo,telefono,metodo_pago,numero_cuenta,password);
+            Usuario usuario = new Usuario(
+                    rs.getLong("idusuario"),
+                    rs.getString("name"),
+                    rs.getString("apellido_p"),
+                    rs.getString("apellido_m"),
+                    rs.getString("correo"),
+                    rs.getString("telefono"),
+                    rs.getString("metodo_pago"),
+                    rs.getString("nro_cuenta"),
+                    rs.getString("password")
+            );
+
+            logger.debug("Mapeando fila de resultado a Usuario: {}", usuario);
+            return usuario;
         }
     }
+
     /**
-     * Mapeador para convertir resultados de consultas SQL en objetos Usuario.
+     * Mapeador para convertir resultados de consultas SQL en objetos Usuario (para validación).
      */
     public static class usuarioMapValidar implements RowMapper<Usuario> {
-        /**
-         * Convierte una fila del ResultSet en un objeto Usuario.
-         *
-         * @param rs     el ResultSet que contiene los datos de la consulta.
-         * @param rowNum el número de la fila actual.
-         * @return un objeto Usuario con los datos de la fila.
-         * @throws SQLException si ocurre un error al leer los datos del ResultSet.
-         */
         @Override
         public Usuario mapRow(ResultSet rs, int rowNum) throws SQLException {
-            long id=rs.getLong("idusuario");
-            String name=rs.getString("name");
-            String apellidop=rs.getString("apellido_p");
-            String apellido_m=rs.getString("apellido_m");
-            String correo=rs.getString("correo");
-            String telefono=rs.getString("telefono");
-            String metodo_pago=rs.getString("metodo_pago");
-            String numero_cuenta=rs.getString("nro_cuenta");
+            Usuario usuario = new Usuario(
+                    rs.getLong("idusuario"),
+                    rs.getString("name"),
+                    rs.getString("apellido_p"),
+                    rs.getString("apellido_m"),
+                    rs.getString("correo"),
+                    rs.getString("telefono"),
+                    rs.getString("metodo_pago"),
+                    rs.getString("nro_cuenta")
+            );
 
-            return new Usuario(id,name,apellidop,apellido_m,correo,telefono,metodo_pago,numero_cuenta);
+            logger.debug("Mapeando fila de resultado a Usuario para validación: {}", usuario);
+            return usuario;
         }
     }
 }
