@@ -1,0 +1,16 @@
+logging:
+    level:
+        com.ApiNoticias.APINoticias_Backend: debug
+spring:
+    application:
+        name: crup_bd_api_noticia
+datasource:
+    my-connection:
+        jdbc-url: jdbc:mysql://bfqbqkxgaslrjtwpr6wn-mysql.services.clever-cloud.com/bfqbqkxgaslrjtwpr6wn
+        username: um7owh6xrefyzh8q
+        password: 949KhdTBJHfFtEVrUND4
+        maximum-pool-size: 20
+        pool-name: "crud-api"
+        auto-commit: true
+server:
+    port: ${PORT:8080}
