@@ -32,7 +32,12 @@ export class ValidarUsuarioService {
   }
 
   createUsuario(newUsuario: Usuario): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiurlcre, newUsuario, { headers });
+    const httpOptions = {
+      withCredentials: true,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    return this.http.post(this.apiurlcre, newUsuario, httpOptions);
   }
 }
