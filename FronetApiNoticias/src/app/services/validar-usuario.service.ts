@@ -19,7 +19,9 @@ export class ValidarUsuarioService {
   private apiUrl = 'https://responsible-perfection-apinoticia1.up.railway.app/validarUsuario';
   private apiurlcre='https://responsible-perfection-apinoticia1.up.railway.app/Usuario';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+   }
   validarUsuario(correo: string, password: string): Observable<any> {
     const body = { correo, password }; // Construir el cuerpo de la solicitud
     const httpOptions = {
