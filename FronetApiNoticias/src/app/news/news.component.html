@@ -18,7 +18,7 @@
                 <img src="./assets/imagenes/user.png.jpg" alt="Usuario" class="user-icon">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-datos">Ver perfil</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalDatos">Ver perfil</a></li>
                 <li><a class="dropdown-item" routerLink="/inicio-sesion" (click)="onLogout()">Cerrar sesión</a></li>
             </ul>
         </div>
@@ -128,7 +128,6 @@
                     <h3 class="text-center">No tiene líneas de tiempo registradas</h3>
                 </div>
                 <div class="contenedor-timelines" *ngIf="timelines?.length">
-                <div class="contenedor-timelines">
                     <p-card *ngFor="let timeline of timelines" [header]="timeline.nombre" [subheader]="timeline.fecha_ultimaModificacion" [style]="{width: '240px'}" (click)="sendData(timeline.id.toString())" data-bs-dismiss="modal"> 
                         <ng-template pTemplate="header">
                             <img [src]="timeline.imagenPreview" alt="Línea de tiempo">
@@ -144,11 +143,11 @@
 </div>
 
 <!--Modal que muestra los datos del usuario-->
-<div id="modal-datos" class="modal-fade" tabindex="-1" aria-labelledby="modalDatosUsuario" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="modalDatos" tabindex="-1" aria-labelledby="modalDatosUsuario" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalDatosLabel">Tus datos</h5>
+          <h5 class="modal-title">Tus datos</h5>
         </div>
         <div class="modal-body">
           <ul class="list-group">
@@ -179,7 +178,7 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="">Cerrar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
