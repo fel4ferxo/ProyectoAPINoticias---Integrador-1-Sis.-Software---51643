@@ -22,6 +22,11 @@ Los casos de uso del proyecto se indica en el siguiente diagrama, del cual en el
 * Mostrar noticias en forma de tarjetas.
 * Agregar filtros.
 * Leer noticia.
+* Buscar noticia.
+* Filtrar notícias.
+* Crear la línea de tiempo.
+* Mostrar la línea de tiempo con imagen.
+* Mostrar las líneas de tiempo creadas por el usuario.
 
 
 ![CasoUsoRevisado](https://github.com/user-attachments/assets/361735ec-d6fd-40a8-918d-2a10ec2b1e6b)
