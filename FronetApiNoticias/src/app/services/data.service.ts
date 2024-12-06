@@ -9,7 +9,7 @@ import { Usuario } from '../inicio-sesion/inicio-sesion.component';
 //Este servicio permite la transmición de datos entre componentes. En este caso transporta noticias (News)
 export class DataService {
   //Inincialización de la ID del usuario al cual se le buscaran los datos relacionados
-  private dataUsuario =  new Subject<Usuario>();
+  private dataUsuario =  new ReplaySubject<Usuario>();
   dataUsuario$ = this.dataUsuario.asObservable();
   //Mapa que guarda la ID de la línea de tiempo a la que se va añadir las noticias, y las noticias a registrar
   private dataSources: Map<string, ReplaySubject<News[]>> = new Map();

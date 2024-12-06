@@ -95,8 +95,9 @@ export class NewsComponent implements OnInit{
   }
 
   getUsuario():void{
-    this.dataService.dataUsuario$.subscribe( (dataUsuario) => {
+    this.dataService.dataUsuario$.subscribe((dataUsuario) => {
       this.usuario = dataUsuario;
+      console.log("Usuario recibido", this.usuario);
     })
   }
 

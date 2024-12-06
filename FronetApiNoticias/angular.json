@@ -60,7 +60,14 @@
               "outputHashing": "all"
             },
             "development": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
               "extractLicenses": true,
               "sourceMap": false
             }

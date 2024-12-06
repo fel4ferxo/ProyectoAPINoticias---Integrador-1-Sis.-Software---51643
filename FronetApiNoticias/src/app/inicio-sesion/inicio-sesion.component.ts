@@ -46,6 +46,7 @@ export class InicioSesionComponent {
 
   sendDataUsuario(usuario: Usuario){
     this.dataService.setDataUsuario(usuario);
+    console.log("Usuario enviado", usuario);
   }
 
   guardarUsuarioLocalStorage(usuario: Usuario){
