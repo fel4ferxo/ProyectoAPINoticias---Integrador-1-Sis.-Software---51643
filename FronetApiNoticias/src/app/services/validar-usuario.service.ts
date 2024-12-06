@@ -17,6 +17,7 @@ export interface Usuario {
 })
 export class ValidarUsuarioService {
   private apiUrl = 'https://responsible-perfection-apinoticia1.up.railway.app/validarUsuario';
+  private apiurlcre='https://responsible-perfection-apinoticia1.up.railway.app/Usuario';
 
   constructor(private http: HttpClient) { }
   validarUsuario(correo: string, password: string): Observable<any> {
@@ -32,6 +33,6 @@ export class ValidarUsuarioService {
 
   createUsuario(newUsuario: Usuario): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl, newUsuario, { headers });
+    return this.http.post(this.apiurlcre, newUsuario, { headers });
   }
 }
