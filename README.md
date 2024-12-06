@@ -27,8 +27,8 @@ Los casos de uso del proyecto se indica en el siguiente diagrama:
 * Crear la línea de tiempo.
 * Mostrar la línea de tiempo con imagen.
 * Mostrar las líneas de tiempo creadas por el usuario.
+![UseCaseDiagram1](https://github.com/user-attachments/assets/b82b86ab-4783-4e72-85e5-d0b1edd7b110)
 
 
-![CasoUsoRevisado](https://github.com/user-attachments/assets/361735ec-d6fd-40a8-918d-2a10ec2b1e6b)
 
 Para leer la documentación específica del código lea el archivo "DocumentacionGeneral.md"
