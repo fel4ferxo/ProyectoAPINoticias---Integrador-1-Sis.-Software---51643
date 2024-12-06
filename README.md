@@ -14,7 +14,7 @@ El siguiente proyecto pretende servir como una plataforma de noticias dirigida a
 5. Página de creación y edición de una línea de tiempo.
 6. Página _overview_ de todas las líneas de tiempo creadas por el usuario.
 
-Los casos de uso del proyecto se indica en el siguiente diagrama, del cual en el 40% de los casos de uso se incluye:
+Los casos de uso del proyecto se indica en el siguiente diagrama:
 * Registro de usuario.
 * Inicio de sesión.
 * Verificar usuario.
