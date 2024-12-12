@@ -14,7 +14,7 @@ El siguiente proyecto pretende servir como una plataforma de noticias dirigida a
 5. Página de creación y edición de una línea de tiempo.
 6. Página _overview_ de todas las líneas de tiempo creadas por el usuario.
 
-Los casos de uso del proyecto se indica en el siguiente diagrama, del cual en el 40% de los casos de uso se incluye:
+Los casos de uso del proyecto se indica en el siguiente diagrama:
 * Registro de usuario.
 * Inicio de sesión.
 * Verificar usuario.
@@ -22,8 +22,13 @@ Los casos de uso del proyecto se indica en el siguiente diagrama, del cual en el
 * Mostrar noticias en forma de tarjetas.
 * Agregar filtros.
 * Leer noticia.
+* Buscar noticia.
+* Filtrar notícias.
+* Crear la línea de tiempo.
+* Mostrar la línea de tiempo con imagen.
+* Mostrar las líneas de tiempo creadas por el usuario.
+![UseCaseDiagram1](https://github.com/user-attachments/assets/b82b86ab-4783-4e72-85e5-d0b1edd7b110)
 
 
-![CasoUsoRevisado](https://github.com/user-attachments/assets/361735ec-d6fd-40a8-918d-2a10ec2b1e6b)
 
 Para leer la documentación específica del código lea el archivo "DocumentacionGeneral.md"
