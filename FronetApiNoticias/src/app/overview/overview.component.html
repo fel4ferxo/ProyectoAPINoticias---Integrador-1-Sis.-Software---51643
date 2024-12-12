@@ -24,7 +24,7 @@
               <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-datos">Ver perfil</a></li>
-                <li><a class="dropdown-item" (click)="onLogOut()">Cerrar sesión</a></li>
+                <li><a class="dropdown-item" routerLink="/inicio-sesion" (click)="onLogOut()" >Cerrar sesión</a></li>
               </ul>
             </div>
           </div>
@@ -53,7 +53,7 @@
         <div class="modal-header">
           <h5 class="modal-title" id="modalTitulo">Ingrese los datos</h5>
         </div>
-        
+
           <div class="modal-body">
             <div class="input-group">
               <input required type="text" class="form-control form-control-lg" id="nombre" placeholder="Título de línea de tiempo" formControlName="nombre" [ngClass]="{'is-invalid': f['nombre'].touched && f['nombre'].invalid, 'is-valid': f['nombre'].touched && f['nombre'].valid}">

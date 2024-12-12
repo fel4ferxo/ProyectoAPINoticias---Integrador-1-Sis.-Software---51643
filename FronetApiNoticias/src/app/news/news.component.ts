@@ -1,3 +1,4 @@
+import { NoticiaService } from './../services/noticia.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { Timeline } from '../overview/overview.component';
 import { Usuario } from '../inicio-sesion/inicio-sesion.component';
+import { Noticia } from '../services/noticia.service';
 //Interfaz de la noticia
 export interface News{
   id: number;
@@ -65,8 +67,8 @@ export class NewsComponent implements OnInit{
   noticiasOriginales: News[] = [];
   /**
    * Función que hace una solicitud inicial para mostrar noticias apenas cargue la página.
-   * Estas noticias terminan siendo asignadas a dos arrays: 
-   * noticiasFiltradas (las noticias que son mostradas después de cada búsqueda), y 
+   * Estas noticias terminan siendo asignadas a dos arrays:
+   * noticiasFiltradas (las noticias que son mostradas después de cada búsqueda), y
    * noticias originales (array que contiene las noticias que muestra las primeras noticias que aparecieron para no gastar una solicitud de la API)
    */
   getNoticias():void{
@@ -76,8 +78,8 @@ export class NewsComponent implements OnInit{
       next: (response) => {
         this.newsData = response.articles.map((article) => ({
           id: idContador++,
-          categoria: 'General', 
-          portal: article.source?.name || '', 
+          categoria: 'General',
+          portal: article.source?.name || '',
           titular: article.title,
           subtitulo: article.description,
           nombreAutor: article.author,
@@ -123,7 +125,7 @@ export class NewsComponent implements OnInit{
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   }
-  
+
   /**
    * Función que hace solicitudes a la API para la búsqueda y filtrado de noticias
    */
@@ -197,8 +199,8 @@ export class NewsComponent implements OnInit{
           next: (response) => {
             this.newsData = response.articles.map((article) => ({
               id: idContador++,
-              categoria: 'General', 
-              portal: article.source?.name || '', 
+              categoria: 'General',
+              portal: article.source?.name || '',
               titular: article.title,
               subtitulo: article.description,
               nombreAutor: article.author,
@@ -241,7 +243,7 @@ export class NewsComponent implements OnInit{
    * @param {AuthService} authService  - Inicializa AuthService, el servicio que cheque que el usuario este logeado para permitir el acceso.
    * @param {DataService} dataService  - Inicializa DataService, el servicio que nos permite mandar datos entre componentes.
    */
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService, private dataService: DataService){};
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private authService: AuthService, private dataService: DataService, private noticiaService: NoticiaService){};
 
   /**
    * Función que manda las noticias seleccionadas por el usuario para unirlas a una línea de tiempo
@@ -249,13 +251,17 @@ export class NewsComponent implements OnInit{
    */
   sendData(receiverId:string){
     if(this.dataEnviada.length > 0){
-      this.dataService.setData(receiverId, this.dataEnviada);  
+      this.dataService.setData(receiverId, this.dataEnviada);
+
       console.log(this.dataEnviada);
+      for (let noticia of this.dataEnviada){
+        this.noticiaService.createNoticia(noticia);
+      }
       this.router.navigate(['/timeline', receiverId]);
     }else{
       console.log('Nada que enviar');
     }
-    
+
   }
   /**
    * Función que cierra la sesión
@@ -282,8 +288,8 @@ export class NewsComponent implements OnInit{
 
   /**
    * Función para seleccionar noticias
-   * @param selectedCardData 
-   * @returns 
+   * @param selectedCardData
+   * @returns
    */
   seleccionarNoticias(selectedCardData: any){
     if(!selectedCardData){
@@ -292,7 +298,7 @@ export class NewsComponent implements OnInit{
     }
     //Hace aparecer un menú de opciones para la selección de las noticias
     if(!this.toolbarVisible){
-      this.toolbarVisible = true; 
+      this.toolbarVisible = true;
       this.cdr.detectChanges();
     }
 
@@ -300,7 +306,7 @@ export class NewsComponent implements OnInit{
       this.arrayTemporal.push(selectedCardData);
       console.log("selected news: ", selectedCardData);
       console.log("current selection", this.arrayTemporal);
-    
+
   }
   /**
    * Función que cancela la selección de las noticias
@@ -366,5 +372,5 @@ export class NewsComponent implements OnInit{
     modal.addEventListener('click', (e) =>{
       if(e.target === modal) modal.close();
     })
-  }; 
+  };
 }

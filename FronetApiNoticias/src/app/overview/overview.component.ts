@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Usuario } from '../inicio-sesion/inicio-sesion.component';
 import { DataService } from '../services/data.service';
@@ -24,7 +24,7 @@ export interface Timeline{
 })
 
 export class OverviewComponent implements OnInit{
-  usuario: Usuario | null = null; 
+  usuario: Usuario | null = null;
   //Lineas de tiempo del usuario
   timelines: Timeline[] = [];
   visible: boolean= false;
@@ -97,7 +97,9 @@ export class OverviewComponent implements OnInit{
    * Función que invoca el servicio authservice para cerrar la sesión del usuario
    */
   onLogOut(){
+    console.log("cerrar secion");
     this.authService.logOut();
+    this.router.navigate([`/inicio-sesion`]);
   }
 
   showDialog(){
@@ -174,7 +176,7 @@ export class OverviewComponent implements OnInit{
             fecha_ultimaModificacion: '24-11-2024',
             imagenPreview: 'https://anti-money-laundering.eu/wp-content/uploads/2024/01/news-2444778_1280.jpg'
           }
-            
+
         ]))
       }
     } else {

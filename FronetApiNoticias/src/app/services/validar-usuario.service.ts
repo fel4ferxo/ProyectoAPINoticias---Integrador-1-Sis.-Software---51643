@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -18,7 +18,7 @@ export interface Usuario {
 export class ValidarUsuarioService {
   private apiUrl = 'https://responsible-perfection-apinoticia1.up.railway.app/validarUsuario';
   private apiurlcre='https://responsible-perfection-apinoticia1.up.railway.app/Usuario';
-
+  private HttpClient=inject(HttpClient);
   constructor(private http: HttpClient) {
 
    }
@@ -30,7 +30,7 @@ export class ValidarUsuarioService {
         'Content-Type': 'application/json'
       })
     };
-    return this.http.post<any>(this.apiUrl, body,httpOptions); // Realizar la solicitud POST
+    return this.HttpClient.post<any>(this.apiUrl, body,httpOptions); // Realizar la solicitud POST
   }
 
   createUsuario(newUsuario: Usuario): Observable<any> {
